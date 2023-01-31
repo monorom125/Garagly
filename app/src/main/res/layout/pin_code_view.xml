@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingVertical="8dp"
+        tools:background="@color/black">
+
+        <ImageView
+            android:id="@+id/imageViewPin1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_pin_circle"
+            app:layout_constraintEnd_toStartOf="@id/imageViewPin2"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/imageViewPin2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_pin_circle"
+            app:layout_constraintEnd_toStartOf="@id/imageViewPin3"
+            app:layout_constraintStart_toEndOf="@id/imageViewPin1"
+            app:layout_constraintTop_toTopOf="@id/imageViewPin1" />
+
+        <ImageView
+            android:id="@+id/imageViewPin3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_pin_circle"
+            app:layout_constraintEnd_toStartOf="@id/imageViewPin4"
+            app:layout_constraintStart_toEndOf="@id/imageViewPin2"
+            app:layout_constraintTop_toTopOf="@id/imageViewPin1" />
+
+        <ImageView
+            android:id="@+id/imageViewPin4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_pin_circle"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/imageViewPin3"
+            app:layout_constraintTop_toTopOf="@id/imageViewPin1" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>
