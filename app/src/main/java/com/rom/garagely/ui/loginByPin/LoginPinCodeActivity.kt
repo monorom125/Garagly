@@ -19,6 +19,7 @@ class LoginPinCodeActivity : BaseActivity<ActivityLoginPinCodeBinding>() {
 
     override val layoutResource: Int
         get() = R.layout.activity_login_pin_code
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }

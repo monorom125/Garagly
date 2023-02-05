@@ -13,6 +13,7 @@ class LoginByMailActivity : BaseActivity<ActivityLoginByMailBinding>() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        hideStatusAndNavigationBar()
         binding.buttonLogin.setOnClickListener {
             LoginPinCodeActivity.launch(this)
         }
