@@ -5,15 +5,36 @@
     <androidx.constraintlayout.widget.ConstraintLayout xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".MainActivity">
+        tools:context=".MainActivity"
+        android:theme="@style/Theme.MaterialComponents">
 
         <com.rom.garagely.custom.view.GaraglyHeaderBar
             android:id="@+id/posHeaderToolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
+            android:backgroundTint="@color/app_bar_color"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <View
+            android:id="@+id/line"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/colorHintText"
+            app:layout_constraintTop_toBottomOf="@id/posHeaderToolbar" />
+
+        <com.google.android.material.navigationrail.NavigationRailView
+            android:id="@+id/navigation_rail"
+            style="@style/ThemeOverlay.App.NavigationRailView"
+            android:layout_width="wrap_content"
+            android:background="@color/light_orage"
+            android:layout_height="0dp"
+            app:labelVisibilityMode="labeled"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/line"
+            app:menu="@menu/garagly_rail_navigation_item" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

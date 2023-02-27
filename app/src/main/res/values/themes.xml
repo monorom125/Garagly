@@ -17,6 +17,35 @@
         <!-- Customize your theme here. -->
     </style>
 
+    <style name="Theme.MaterialComponents" parent="Theme.Material3.DayNight.NoActionBar">
+        <item name="fontFamily">@font/poppins_regular</item>
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:windowEnterTransition">@android:transition/explode</item>
+        <item name="android:windowExitTransition">@android:transition/explode</item>
+        <item name="navigationRailStyle">@style/Widget.App.NavigationRailView</item>
+    </style>
+
+    <style name="Widget.App.NavigationRailView" parent="Widget.Material3.NavigationRailView">
+        <item name="materialThemeOverlay">@style/ThemeOverlay.App.NavigationRailView</item>
+    </style>
+
+    <style name="ThemeOverlay.App.NavigationRailView" parent="">
+        <item name="colorSecondaryContainer">@color/colorOrange</item>
+        <item name="colorPrimary">@color/light_orage</item>
+        <item name="indicatorColor">@color/colorOrange</item>
+        <item name="itemTextAppearanceActive">?attr/textAppearanceLabelMedium</item>
+        <item name="itemTextAppearanceInactive">?attr/textAppearanceBodySmall</item>
+        <item name="itemIconTint">@color/nivation_rail_color</item>
+        <item name="fontFamily">@font/poppins_regular</item>
+
+    </style>
+
+    <style name="Navigation_rail" parent="Widget.Material3.NavigationRailView.ActiveIndicator">
+        <item name="color">@color/nivation_rail_color</item>
+    </style>
+
     <!--    TextView Style-->
     <style name="TextViewStyle" parent="TextAppearance.AppCompat">
         <item name="android:includeFontPadding">false</item>
