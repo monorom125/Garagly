@@ -36,6 +36,15 @@
             app:layout_constraintTop_toBottomOf="@id/line"
             app:menu="@menu/garagly_rail_navigation_item" />
 
+        <FrameLayout
+            android:id="@+id/layoutContainer"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintStart_toEndOf="@id/navigation_rail"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/posHeaderToolbar"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </layout>

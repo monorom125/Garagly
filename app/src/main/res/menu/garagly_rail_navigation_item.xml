@@ -2,17 +2,17 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/alarms"
+        android:id="@+id/repairing"
         android:enabled="true"
         android:icon="@drawable/ic_tools"
         android:title="@string/repair" />
     <item
-        android:id="@+id/schedule"
+        android:id="@+id/booking"
         android:enabled="true"
         android:icon="@drawable/ic_car"
         android:title="@string/booking"/>
     <item
-        android:id="@+id/timer"
+        android:id="@+id/journal"
         android:enabled="true"
         android:icon="@drawable/ic_journal"
         android:title="@string/journal"/>

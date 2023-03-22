@@ -6,4 +6,6 @@
     <string name="repair">Repair</string>
     <string name="booking">Booking</string>
     <string name="journal">Journal</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
