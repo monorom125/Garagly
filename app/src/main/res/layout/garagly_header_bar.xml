@@ -37,6 +37,17 @@
             tools:text="Repairing Management" />
 
         <ImageView
+
+            android:id="@+id/ImageView_flag"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/imageLogout"
+            android:src="@drawable/ic_cambodia"
+            android:layout_marginEnd="16dp"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
             android:id="@+id/imageLogout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

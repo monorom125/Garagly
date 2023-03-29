@@ -5,12 +5,20 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.animation.AnimationUtils
+import androidx.activity.viewModels
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.coroutineScope
 import com.rom.garagely.MainActivity
 import com.rom.garagely.R
+import com.rom.garagely.common.PreferencesManager
+import com.rom.garagely.constant.SharedPreferenceKeys
 import com.rom.garagely.databinding.ActivityLoginPinCodeBinding
 import com.rom.garagely.ui.base.BaseActivity
+import com.rom.garagely.ui.loginActiviy.LoginByMailActivity
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
+@AndroidEntryPoint
 class LoginPinCodeActivity : BaseActivity<ActivityLoginPinCodeBinding>() {
 
     companion object {
@@ -48,15 +56,34 @@ class LoginPinCodeActivity : BaseActivity<ActivityLoginPinCodeBinding>() {
         AnimationUtils.loadAnimation(this, R.anim.shake_animation)
     }
 
+    private val viewModel: LoginPinCodeViewModel by viewModels()
+
+    private val accountId: String?
+        get() = PreferencesManager.instance.get(SharedPreferenceKeys.USER_ID)
 
     override val layoutResource: Int
         get() = R.layout.activity_login_pin_code
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        if(accountId.isNullOrEmpty()){
+            LoginByMailActivity.launch(this)
+        }
         hideStatusAndNavigationBar()
         setupPinSelection()
 
+        lifecycle.coroutineScope.launch {
+            viewModel.isEnterPinSuccess.collect() {
+                if (it) {
+                    MainActivity.launch(this@LoginPinCodeActivity, viewModel.user!!)
+                    finish()
+                } else {
+                    binding.layoutPin.root.startAnimation(shakeAnimation)
+                    clearPins()
+                }
+            }
+        }
     }
 
     private fun setupPinSelection() {
@@ -104,12 +131,7 @@ class LoginPinCodeActivity : BaseActivity<ActivityLoginPinCodeBinding>() {
 
     private fun checkPins() {
         if (pins.size == pinViews.size) {
-            if(pins.joinToString("") == "1234"){
-                MainActivity.launch(this)
-            }else{
-                binding.layoutPin.root.startAnimation(shakeAnimation)
-                clearPins()
-            }
+            viewModel.checkPinCode(pinCode = pins.joinToString(""))
         }
     }
 }

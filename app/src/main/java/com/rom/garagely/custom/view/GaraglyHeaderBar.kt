@@ -11,4 +11,14 @@ class GaraglyHeaderBar @JvmOverloads constructor(
 ) : ConstraintLayout(context, attr, defStyle){
 
     private val binding = GaraglyHeaderBarBinding.inflate(LayoutInflater.from(context), this, true)
+
+
+
+    fun setGaragelyName(name : String){
+        binding.tvGarageName.text = name
+    }
+
+    fun setTitle(string: String){
+        binding.posTitle.text = string
+    }
 }

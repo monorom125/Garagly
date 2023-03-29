@@ -2,10 +2,13 @@ package com.rom.garagely
 
 import android.content.Context
 import android.content.Intent
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.annotation.RequiresApi
 import androidx.fragment.app.FragmentManager
 import com.rom.garagely.databinding.ActivityMainBinding
+import com.rom.garagely.model.User
 import com.rom.garagely.ui.base.BaseActivity
 import com.rom.garagely.ui.base.BaseFragment
 import com.rom.garagely.ui.loginByPin.LoginPinCodeActivity
@@ -15,8 +18,9 @@ import java.util.*
 class MainActivity : BaseActivity<ActivityMainBinding>() {
 
     companion object {
-        fun launch(context: Context) {
+        fun launch(context: Context, user: User) {
             context.startActivity(Intent(context, MainActivity::class.java).apply {
+                putExtra("USER", user)
             })
         }
     }
@@ -25,6 +29,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
 
     private var selectedDate = Date()
 
+    private var user: User? = null
     private var topStackTag: String? = null
 
     private val backStackFragmentNames = arrayListOf<String>()
@@ -32,19 +37,23 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
     override val layoutResource: Int
         get() = R.layout.activity_main
 
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        this.user = intent.getParcelableExtra("USER", User::class.java) as User
+        binding.posHeaderToolbar.setGaragelyName(this.user?.name ?: "")
+        binding.posHeaderToolbar.setTitle("Repairing Management")
         pushStack(RepairingManagementFragment())
         binding.navigationRail.setOnItemSelectedListener { item ->
-            when(item.itemId){
+            when (item.itemId) {
                 R.id.repairing -> {
-                       pushStack(RepairingManagementFragment())
-                           true
+                    pushStack(RepairingManagementFragment())
+                    true
                 }
-                R.id.booking ->{
-                        false
+                R.id.booking -> {
+                    false
                 }
-                R.id.journal ->{
+                R.id.journal -> {
                     false
                 }
                 else -> {
@@ -54,7 +63,11 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
         }
     }
 
-    fun pushStack(fragment: BaseFragment<*>, isReplace: Boolean = false, withAnimation: Boolean = true) {
+    fun pushStack(
+        fragment: BaseFragment<*>,
+        isReplace: Boolean = false,
+        withAnimation: Boolean = true
+    ) {
         currentFragment = fragment
         val tag = fragment.tagID
         topStackTag = tag
