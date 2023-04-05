@@ -47,7 +47,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
         binding.navigationRail.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.repairing -> {
-                    pushStack(RepairingManagementFragment())
+                    pushStack(RepairingManagementFragment(),true)
                     true
                 }
                 R.id.booking -> {

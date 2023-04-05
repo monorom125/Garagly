@@ -16,6 +16,9 @@ open class BaseModel :  Cloneable, Parcelable {
 
     @IgnoredOnParcel
     var createdAt : Date = Date()
+    @IgnoredOnParcel
+    var updatedAt : Date = Date()
+
 }
 
 
