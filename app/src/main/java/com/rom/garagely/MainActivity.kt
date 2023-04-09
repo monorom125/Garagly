@@ -13,8 +13,10 @@ import com.rom.garagely.ui.base.BaseActivity
 import com.rom.garagely.ui.base.BaseFragment
 import com.rom.garagely.ui.loginByPin.LoginPinCodeActivity
 import com.rom.garagely.ui.reparingManagement.RepairingManagementFragment
+import dagger.hilt.android.AndroidEntryPoint
 import java.util.*
 
+@AndroidEntryPoint
 class MainActivity : BaseActivity<ActivityMainBinding>() {
 
     companion object {

@@ -33,7 +33,7 @@
 
     <style name="ThemeOverlay.App.NavigationRailView" parent="">
         <item name="colorSecondaryContainer">@color/colorOrange</item>
-        <item name="colorPrimary">@color/light_orage</item>
+        <item name="colorPrimary">@color/light_orange</item>
         <item name="indicatorColor">@color/colorOrange</item>
         <item name="itemTextAppearanceActive">?attr/textAppearanceLabelMedium</item>
         <item name="itemTextAppearanceInactive">?attr/textAppearanceBodySmall</item>

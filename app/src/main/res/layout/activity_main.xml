@@ -28,7 +28,7 @@
             android:id="@+id/navigation_rail"
             style="@style/ThemeOverlay.App.NavigationRailView"
             android:layout_width="wrap_content"
-            android:background="@color/light_orage"
+            android:background="@color/light_orange"
             android:layout_height="0dp"
             app:labelVisibilityMode="labeled"
             app:layout_constraintBottom_toBottomOf="parent"

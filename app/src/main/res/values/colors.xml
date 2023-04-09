@@ -12,10 +12,14 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="light_orage">#FFFFE5</color>
+    <color name="light_orange">#FFFFE5</color>
     <color name="app_bar_color">#F9F9F9</color>
 
+
+    <color name="colorTextWhite">#FFFFFF</color>
+    <color name="color_white_gray">#F9F9F9</color>
     <color name="color_light_black_text">#545454</color>
     <color name="colorHintText">#B3B3B3</color>
     <color name="colorOrange">#FF961B</color>
+    <color name="line_divider_view">#D9D9D9</color>
 </resources>
