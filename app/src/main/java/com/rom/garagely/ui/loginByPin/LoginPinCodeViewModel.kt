@@ -38,6 +38,10 @@ class LoginPinCodeViewModel @Inject constructor(
                         this@LoginPinCodeViewModel.user = user
                         _isEnterPinSuccess.value = user?.pincode == pinCode
                     }
+                    else{
+                        Log.d("login error", it.exception.toString()
+                        )
+                    }
                 }
         }
     }

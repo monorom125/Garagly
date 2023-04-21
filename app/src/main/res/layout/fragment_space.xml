@@ -7,14 +7,20 @@
         android:layout_height="match_parent"
         tools:context=".ui.reparingManagement.space.SpaceFragment">
 
-
-
         <View
+            android:id="@+id/view_space"
             android:layout_width="match_parent"
             android:layout_height="44dp"
             android:background="@color/color_light_black_text"
             app:layout_constraintBottom_toBottomOf="parent"/>
 
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/spaceRecycleView"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:background="@color/lightBlack"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="@id/view_space"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
