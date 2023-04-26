@@ -21,7 +21,8 @@ class RepairingManagementFragment : BaseFragment<FragmentReparingManagmentBindin
     private val mainSpaceManagerFragment by lazy {
         MainSpaceManagerFragment(
             childFragmentManager,
-            binding.dashBoardContainer.id
+            binding.dashBoardContainer.id,
+            binding.spaceContainer.id,
         )
     }
 
@@ -38,13 +39,7 @@ class RepairingManagementFragment : BaseFragment<FragmentReparingManagmentBindin
 
     private fun setUpSpaceFragment() {
         val spaceFragment = SpaceFragment()
-        childFragmentManager.commit {
-            add(
-                binding.spaceContainer.id,
-                spaceFragment,
-                spaceFragment.id.toString()
-            )
-        }
+        mainSpaceManagerFragment.addToSpaceFragment(spaceFragment, false)
     }
 }
 
