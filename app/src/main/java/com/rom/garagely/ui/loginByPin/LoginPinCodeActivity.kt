@@ -7,7 +7,9 @@ import android.os.Bundle
 import android.view.animation.AnimationUtils
 import androidx.activity.viewModels
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.Observer
 import androidx.lifecycle.coroutineScope
+import androidx.lifecycle.lifecycleScope
 import com.rom.garagely.MainActivity
 import com.rom.garagely.R
 import com.rom.garagely.common.PreferencesManager
@@ -72,18 +74,19 @@ class LoginPinCodeActivity : BaseActivity<ActivityLoginPinCodeBinding>() {
         }
         hideStatusAndNavigationBar()
         setupPinSelection()
+        observableIsEnterPinCode()
 
-        lifecycle.coroutineScope.launch {
-            viewModel.isEnterPinSuccess.collect() {
-                if (it) {
-                    MainActivity.launch(this@LoginPinCodeActivity, viewModel.user!!)
-                    finish()
-                } else {
-                    binding.layoutPin.root.startAnimation(shakeAnimation)
-                    clearPins()
-                }
+    }
+    private fun observableIsEnterPinCode(){
+        viewModel.isEnterPinSuccess.observe(this, Observer {
+            if (it) {
+                MainActivity.launch(this@LoginPinCodeActivity, viewModel.user!!)
+                finish()
+            } else {
+                binding.layoutPin.root.startAnimation(shakeAnimation)
+                clearPins()
             }
-        }
+        })
     }
 
     private fun setupPinSelection() {
@@ -133,5 +136,9 @@ class LoginPinCodeActivity : BaseActivity<ActivityLoginPinCodeBinding>() {
         if (pins.size == pinViews.size) {
             viewModel.checkPinCode(pinCode = pins.joinToString(""))
         }
+    }
+
+    private fun obsevable(){
+
     }
 }

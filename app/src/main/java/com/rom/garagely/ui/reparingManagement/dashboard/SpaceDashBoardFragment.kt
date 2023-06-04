@@ -14,4 +14,14 @@ class SpaceDashBoardFragment : BaseFragment<FragmentSpaceDashBoardBinding>(){
 
     override val layoutResource: Int
         get() = R.layout.fragment_space_dash_board
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        binding.radioView.setOnCheckedChangeListener { _, checkedId ->
+            when(checkedId){
+                binding.operatingCheck.id -> {}
+                binding.bookingCheck.id -> {}
+            }
+        }
+    }
 }

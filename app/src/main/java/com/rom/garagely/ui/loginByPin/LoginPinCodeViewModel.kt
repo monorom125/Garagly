@@ -1,11 +1,11 @@
 package com.rom.garagely.ui.loginByPin
 
 import android.util.Log
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.storage.FirebaseStorage
 import com.rom.garagely.constant.Constant.USER_COLLECTION
 import com.rom.garagely.model.User
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -21,7 +21,8 @@ class LoginPinCodeViewModel @Inject constructor(
 ) : ViewModel() {
 
     private val _isEnterPinSuccess = MutableStateFlow<Boolean>(false)
-    val isEnterPinSuccess = _isEnterPinSuccess.asStateFlow()
+
+    val isEnterPinSuccess = MutableLiveData<Boolean>()
 
     var user : User? = null
 
@@ -36,7 +37,7 @@ class LoginPinCodeViewModel @Inject constructor(
                         val user = it.result.toObjects(User::class.java).firstOrNull()
                         Log.d("User","${it.result}" )
                         this@LoginPinCodeViewModel.user = user
-                        _isEnterPinSuccess.value = user?.pincode == pinCode
+                        isEnterPinSuccess.postValue((user?.pincode == pinCode))
                     }
                     else{
                         Log.d("login error", it.exception.toString()
