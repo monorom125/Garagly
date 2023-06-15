@@ -15,12 +15,6 @@ interface BaseComposeView {
         onConfirm: () -> Unit
     )
 
-    fun showCreateUpdateDeleteMessageDialog(
-        name: String,
-        isUpdate: Boolean = false,
-        isDelete: Boolean = false
-    )
-
     fun showProgress()
 
     fun hideProgress()

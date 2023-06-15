@@ -9,4 +9,9 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="operating">Operating</string>
+    <string name="search">search</string>
+    <string name="name">Name</string>
+    <string name="brand">Brand</string>
+    <string name="price">Price</string>
+    <string name="qaunity">Qaunity</string>
 </resources>

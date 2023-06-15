@@ -44,7 +44,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
         super.onCreate(savedInstanceState)
         this.user = intent.parcelable("USER", User::class.java)!!
         binding.posHeaderToolbar.setGaragelyName(this.user?.name ?: "")
-        binding.posHeaderToolbar.setTitle("Repairing Management")
+        setTitle("Repairing Management")
         pushStack(RepairingManagementFragment())
         binding.navigationRail.setOnItemSelectedListener { item ->
             when (item.itemId) {
@@ -67,6 +67,11 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
                 }
             }
         }
+    }
+
+    fun setTitle(title: String) {
+        binding.posHeaderToolbar.setTitle(title)
+
     }
 
     fun pushStack(
@@ -99,6 +104,5 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
         }
         backStackFragmentNames.add(tag)
     }
-
 
 }

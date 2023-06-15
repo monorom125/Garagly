@@ -12,11 +12,14 @@
             android:id="@+id/layoutMenu"
             android:layout_width="250dp"
             android:layout_height="match_parent"
+            android:background="@color/white_gray"
             app:layout_constraintStart_toStartOf="parent">
+
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rv_menu"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                android:layout_height="match_parent"
+                android:layout_marginTop="24dp" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -31,7 +34,9 @@
             android:id="@+id/productContainer"
             android:layout_width="0dp"
             android:layout_height="match_parent"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/lineDivider">
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
