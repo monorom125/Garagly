@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.google.firebase.firestore.FirebaseFirestore
 import com.rom.garagely.constant.Constant.PRODUCT
 import com.rom.garagely.model.Car
+import com.rom.garagely.util.insert
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -21,14 +22,9 @@ class ProductDetailViewModel @Inject constructor(
 
     fun createProduct(car: Car) {
         viewModelScope.launch {
-            firestore.collection(PRODUCT).add(car).addOnCompleteListener {
-                if(it.isSuccessful){
-                    _createProductStat.value = true
-                }
-            }
-                .addOnFailureListener { }
-
-
+           firestore.insert(car){
+               _createProductStat.value = it
+           }
         }
     }
 }

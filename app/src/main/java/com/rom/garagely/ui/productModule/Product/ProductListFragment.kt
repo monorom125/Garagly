@@ -18,6 +18,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.layout.wrapContentWidth
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
@@ -27,6 +28,8 @@ import androidx.compose.material.Icon
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -41,6 +44,7 @@ import androidx.compose.ui.unit.dp
 import androidx.fragment.app.viewModels
 import com.rom.garagely.MainActivity
 import com.rom.garagely.R
+import com.rom.garagely.model.Car
 import com.rom.garagely.theme.Typography
 import com.rom.garagely.ui.base.BaseComposeFragment
 import dagger.hilt.android.AndroidEntryPoint
@@ -61,6 +65,8 @@ class ProductListFragment : BaseComposeFragment() {
         MainView(viewModel)
     }
 
+
+
     @Composable
     fun MainView(viewModel: ProductListViewModel) {
         val headers = remember {
@@ -69,9 +75,10 @@ class ProductListFragment : BaseComposeFragment() {
         val textState = remember {
             mutableStateOf("")
         }
+        val products by viewModel.product.collectAsState()
         Surface(
             modifier = Modifier.fillMaxSize(),
-            color = Color(0xFFE5E5E5)
+            color = AppColor.Background
         ) {
             Column(Modifier.fillMaxSize()) {
                 Row(
@@ -154,30 +161,79 @@ class ProductListFragment : BaseComposeFragment() {
                         this.FilterHeaderItem(header = header)
                     }
                 }
+                LazyColumn {
+                    items(products.size) {
+                        ProductItem(index = it, car = products[it])
+                    }
+                }
             }
         }
     }
 }
 
-    @Composable
-    fun RowScope.FilterHeaderItem(header: Header) {
-        Row(
-            modifier = Modifier
-                .weight(header.weight)
-                .fillMaxHeight()
-                .fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.Center
-        ) {
-            Text(
-                modifier = Modifier.wrapContentSize(),
-                text = stringResource(id = header.name),
-                style = Typography.h3,
-            )
-            Image(
-                modifier = Modifier.padding(start = 4.dp),
-                painter = painterResource(id = header.orderBy.iconResource),
-                contentDescription = null
-            )
-        }
+@Composable
+fun RowScope.FilterHeaderItem(header: Header) {
+    Row(
+        modifier = Modifier
+            .weight(header.weight)
+            .fillMaxHeight()
+            .fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.Center
+    ) {
+        Text(
+            modifier = Modifier.wrapContentSize(),
+            text = stringResource(id = header.name),
+            style = Typography.h3,
+        )
+        Image(
+            modifier = Modifier.padding(start = 4.dp),
+            painter = painterResource(id = header.orderBy.iconResource),
+            contentDescription = null
+        )
     }
+}
+
+@Composable
+fun ProductItem(index: Int, car: Car) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(color = AppColor.SearchBackground.takeIf { index % 2 != 0 }
+                ?: AppColor.Background),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.Center
+    ) {
+        Text(
+            modifier = Modifier
+                .wrapContentSize()
+                .padding(vertical = 8.dp)
+                .weight(1f),
+            text = car.name ?: "",
+            style = Typography.body2,
+        )
+        Text(
+            modifier = Modifier
+                .wrapContentSize()
+                .weight(1f),
+            text = car.brand ?: "_",
+            style = Typography.body2,
+        )
+        Text(
+            modifier = Modifier
+                .wrapContentSize()
+                .padding(vertical = 8.dp)
+                .weight(1f),
+            text = car.price.toString(),
+            style = Typography.body2,
+        )
+        Text(
+            modifier = Modifier
+                .wrapContentSize()
+                .padding(vertical = 8.dp)
+                .weight(1f),
+            text = car.quantity.toString(),
+            style = Typography.body2,
+        )
+    }
+}

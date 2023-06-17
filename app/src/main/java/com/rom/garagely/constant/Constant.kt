@@ -3,6 +3,6 @@ package com.rom.garagely.constant
 object Constant {
     const val USER_COLLECTION = "user"
     const val SPACE_COLLECTION  = "space"
-    const val  PRODUCT ="roduct"
+    const val  PRODUCT ="product"
 
 }

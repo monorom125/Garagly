@@ -40,6 +40,8 @@ import androidx.compose.ui.unit.dp
 import androidx.fragment.app.viewModels
 import com.rom.garagely.MainActivity
 import com.rom.garagely.R
+import com.rom.garagely.common.PreferencesManager
+import com.rom.garagely.constant.SharedPreferenceKeys
 import com.rom.garagely.model.Car
 import com.rom.garagely.theme.Typography
 import com.rom.garagely.ui.base.BaseComposeFragment
@@ -50,6 +52,7 @@ import java.util.UUID
 class ProductDetailFragment : BaseComposeFragment() {
 
     private val viewModel: ProductDetailViewModel by viewModels()
+    var delegate : Delegate?= null
 
     @Composable
     override fun ContentView() {
@@ -330,7 +333,9 @@ class ProductDetailFragment : BaseComposeFragment() {
                                 id = UUID.randomUUID().toString()
                                 name = nameState.value
                                 price = 100.0
+                                account_id = PreferencesManager.instance.get(SharedPreferenceKeys.USER_ID)
                             }
+                            delegate!!.onUpdateCare()
                             viewModel.createProduct(car)
                         },
                         shape = RoundedCornerShape(8.dp),
@@ -418,5 +423,9 @@ class ProductDetailFragment : BaseComposeFragment() {
                 )
             )
         }
+    }
+
+    interface Delegate{
+        fun onUpdateCare()
     }
 }

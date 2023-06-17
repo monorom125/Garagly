@@ -9,15 +9,9 @@ import java.lang.reflect.Field
 import java.util.*
 
 
-@Parcelize
-open class BaseModel :  Cloneable, Parcelable {
+abstract class BaseModel :  Cloneable, Parcelable {
 
-    @IgnoredOnParcel
-    open var id = UUIDToString()
-    @IgnoredOnParcel
-    var createdAt : Date = Date()
-    @IgnoredOnParcel
-    var updatedAt : Date = Date()
+   abstract val pathName : String
 }
 
 
