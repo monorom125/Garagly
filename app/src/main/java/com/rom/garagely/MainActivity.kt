@@ -74,6 +74,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
 
     }
 
+
     fun pushStack(
         fragment: Fragment,
         isReplace: Boolean = false,
@@ -103,6 +104,15 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
             commit()
         }
         backStackFragmentNames.add(tag)
+    }
+    fun popStack() {
+        if (supportFragmentManager.backStackEntryCount > 1) {
+            topStackTag =
+                supportFragmentManager.getBackStackEntryAt(supportFragmentManager.backStackEntryCount - 2).name
+            supportFragmentManager.popBackStack()
+        } else {
+            finish()
+        }
     }
 
 }

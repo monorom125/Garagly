@@ -121,6 +121,8 @@ class ProductListFragment : BaseComposeFragment() {
                             }
                         }
                     )
+
+
                     Button(
                         onClick = { (activity as MainActivity).pushStack(ProductDetailFragment()) },
                         shape = RoundedCornerShape(8.dp),

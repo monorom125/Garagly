@@ -13,7 +13,7 @@ import java.util.*
 open class BaseModel :  Cloneable, Parcelable {
 
     @IgnoredOnParcel
-    var id = UUIDToString()
+    open var id = UUIDToString()
     @IgnoredOnParcel
     var createdAt : Date = Date()
     @IgnoredOnParcel

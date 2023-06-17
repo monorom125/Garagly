@@ -5,6 +5,13 @@ sealed class Resource<T>(
     val message:String?=null
 ) {
 
+    val isSuccess : Boolean get() = this is Success
+    val isFailure : Boolean get() = this !is Success
+
+    fun getOrNull(): T? {
+        return (this as? Success)?.data
+    }
+
     class Success<T>(data: T?) : Resource<T>(data)
     class Error<T>(message: String?) : Resource<T>(null,message)
     class Loading<T> : Resource<T>()
