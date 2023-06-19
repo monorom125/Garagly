@@ -9,9 +9,11 @@ import java.lang.reflect.Field
 import java.util.*
 
 
-abstract class BaseModel :  Cloneable, Parcelable {
+abstract class BaseModel(
+    open val id: String = UUID.randomUUID().toString()
+) : Cloneable, Parcelable {
 
-   abstract val pathName : String
+    abstract val pathName: String
 }
 
 

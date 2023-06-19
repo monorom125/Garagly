@@ -1,13 +1,26 @@
 package com.rom.garagely.util
 
-import com.google.android.gms.tasks.Task
+import android.net.Uri
 import com.google.firebase.firestore.FirebaseFirestore
-import com.rom.garagely.constant.Constant
+import com.google.firebase.storage.FirebaseStorage
 import com.rom.garagely.model.BaseModel
+import kotlinx.coroutines.tasks.await
 
-suspend fun FirebaseFirestore.insert(model: BaseModel, onSuccess : (Boolean)-> Unit){
+suspend fun FirebaseFirestore.upsert(
+    model: BaseModel,
+    onSuccess: (Boolean) -> Unit,
+    onFailure: (String) -> Unit
+) {
 
-    this.collection(model.pathName).add(model).addOnCompleteListener {
+    this.collection(model.pathName).document(model.id).set(model).addOnCompleteListener {
         onSuccess.invoke(it.isSuccessful)
     }
+        .addOnFailureListener {
+            onFailure.invoke(it.message ?: "Unknown Error")
+        }
+}
+
+suspend fun FirebaseStorage.uploadImage(path: String, image: Uri): String {
+    val result = this.reference.child("products/images").putFile(image).await()
+    return result.storage.downloadUrl.await().toString()
 }

@@ -1,7 +1,16 @@
 package com.rom.garagely.ui.productModule.Product
 
 import AppColor
+import android.net.Uri
+import android.os.Build
+import android.os.Bundle
+import android.view.View
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.PickVisualMediaRequest
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -22,25 +31,33 @@ import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Checkbox
 import androidx.compose.material.CheckboxDefaults
+import androidx.compose.material.DropdownMenu
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
+import androidx.core.net.toUri
 import androidx.fragment.app.viewModels
 import com.rom.garagely.MainActivity
 import com.rom.garagely.R
 import com.rom.garagely.common.PreferencesManager
+import com.rom.garagely.composeView.CoilImageLoader
+import com.rom.garagely.constant.IntentKey
 import com.rom.garagely.constant.SharedPreferenceKeys
 import com.rom.garagely.model.Car
 import com.rom.garagely.theme.Typography
@@ -51,8 +68,29 @@ import java.util.UUID
 @AndroidEntryPoint
 class ProductDetailFragment : BaseComposeFragment() {
 
+    private var image : Uri ? = null
+
+    companion object {
+        fun newInstance(car: Car?): ProductDetailFragment {
+            return ProductDetailFragment().apply {
+                arguments = Bundle().apply {
+                    putParcelable(IntentKey.CAR, car)
+                }
+            }
+        }
+    }
+
     private val viewModel: ProductDetailViewModel by viewModels()
-    var delegate : Delegate?= null
+    private var car: Car? = null
+    var delegate: Delegate? = null
+
+
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        car = arguments?.getParcelable(IntentKey.CAR, Car::class.java)
+        viewModel.setCar(car)
+    }
 
     @Composable
     override fun ContentView() {
@@ -61,13 +99,50 @@ class ProductDetailFragment : BaseComposeFragment() {
         if (result.value) {
             (activity as MainActivity).popStack()
         }
+
     }
 
     @Composable
     fun ProductView() {
+        val carUi = viewModel.car.collectAsState()
+
         val nameState = remember {
-            mutableStateOf("")
+            mutableStateOf(carUi.value?.name ?: "")
         }
+        val brand = remember {
+            mutableStateOf(carUi.value?.brand ?: "")
+        }
+
+        val model = remember {
+            mutableStateOf(carUi.value?.model ?: "")
+        }
+
+        val productInf = remember {
+            mutableStateOf(carUi.value?.info ?: "")
+        }
+        val priceUi = remember {
+            mutableStateOf(carUi.value?.price ?: 0.0)
+        }
+
+        val quantityUi = remember {
+            mutableStateOf(carUi.value?.quantity ?: 0)
+        }
+        val imageUrl = remember {
+            mutableStateOf((carUi.value?.image)?.toUri())
+        }
+
+        var expand by remember {
+            mutableStateOf(false)
+        }
+        val singlePhotoPickerLauncher = rememberLauncherForActivityResult(
+            contract = ActivityResultContracts.PickVisualMedia(),
+            onResult = { uri-> image = uri
+                uri?.let {
+                    imageUrl.value = uri
+                }
+            }
+        )
+
         Surface(
             modifier = Modifier.fillMaxSize(),
             color = AppColor.Background
@@ -83,15 +158,38 @@ class ProductDetailFragment : BaseComposeFragment() {
                 ) {
                     Box(
                         Modifier
-                            .size(180.dp, 160.dp)
+                            .size(160.dp, 160.dp)
                             .padding(top = 24.dp)
+                            .clip(shape = RoundedCornerShape(8.dp))
                     ) {
-                        Image(
-                            painter = painterResource(id = R.drawable.ic_placeholder_image),
-                            contentDescription = null,
-                            contentScale = ContentScale.Crop
+                        CoilImageLoader(
+                            url = imageUrl.value,
+                            placeHolder = R.drawable.ic_placeholder_image,
+                            contentScale = ContentScale.Crop,
+                            modifier = Modifier.clickable {
+                                expand = !expand
+                            }
                         )
                     }
+                    AppDropdownMenu(
+                        items = listOf("Take new photo", "Choose Photo", "Delete"),
+                        expand = expand,
+                        offset = DpOffset(0.dp, 0.dp),
+                        modifier = Modifier,
+                        onDismiss = { expand = !expand },
+                        onItemClick = {
+                            if (it == "Delete") {
+                                imageUrl.value = null
+                            } else {
+                                singlePhotoPickerLauncher.launch(
+                                    PickVisualMediaRequest(
+                                        ActivityResultContracts.PickVisualMedia.ImageOnly
+                                    )
+                                )
+                            }
+                        }
+                    )
+
                     Spacer(modifier = Modifier.height(24.dp))
 
                     OutlinedTextField(
@@ -117,9 +215,9 @@ class ProductDetailFragment : BaseComposeFragment() {
                     )
 
                     OutlinedTextField(
-                        value = nameState.value,
+                        value = priceUi.value.toString(),
                         onValueChange = {
-                            nameState.value = it
+                            priceUi.value = it.toDouble()
                         },
                         modifier = Modifier
                             .fillMaxWidth(0.7f)
@@ -147,9 +245,9 @@ class ProductDetailFragment : BaseComposeFragment() {
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         OutlinedTextField(
-                            value = nameState.value,
+                            value = brand.value,
                             onValueChange = {
-                                nameState.value = it
+                                brand.value = it
                             },
                             modifier = Modifier
                                 .weight(1f)
@@ -171,9 +269,9 @@ class ProductDetailFragment : BaseComposeFragment() {
                             )
                         )
                         OutlinedTextField(
-                            value = nameState.value,
+                            value = model.value,
                             onValueChange = {
-                                nameState.value = it
+                                model.value = it
                             },
                             modifier = Modifier
                                 .weight(1f)
@@ -195,9 +293,9 @@ class ProductDetailFragment : BaseComposeFragment() {
                         )
                     }
                     OutlinedTextField(
-                        value = nameState.value,
+                        value = productInf.value,
                         onValueChange = {
-                            nameState.value = it
+                            productInf.value = it
                         },
                         modifier = Modifier
                             .fillMaxWidth(0.7f)
@@ -227,8 +325,7 @@ class ProductDetailFragment : BaseComposeFragment() {
                         Row {
                             Row(
                                 modifier = Modifier
-                                    .weight(1f)
-                                    .padding(vertical = 8.dp),
+                                    .weight(1f),
                                 verticalAlignment = Alignment.CenterVertically
                             ) {
                                 Text(
@@ -246,7 +343,7 @@ class ProductDetailFragment : BaseComposeFragment() {
                             Row(
                                 modifier = Modifier
                                     .weight(1f)
-                                    .padding(vertical = 8.dp),
+                                    .padding(top = 24.dp),
                                 verticalAlignment = Alignment.CenterVertically
                             ) {
                                 Text(
@@ -265,7 +362,8 @@ class ProductDetailFragment : BaseComposeFragment() {
 
                         Text(
                             text = "Quantity",
-                            style = Typography.h2
+                            style = Typography.h2,
+                            modifier = Modifier.padding(top = 24.dp)
                         )
                         Row(
                             modifier = Modifier.padding(24.dp),
@@ -273,16 +371,26 @@ class ProductDetailFragment : BaseComposeFragment() {
                         ) {
                             Image(
                                 painter = painterResource(id = R.drawable.ic_minus),
-                                contentDescription = null
+                                contentDescription = null,
+                                modifier = Modifier.clickable {
+                                    if (quantityUi.value > 0) {
+                                        quantityUi.value--
+                                    } else {
+                                        return@clickable
+                                    }
+                                }
                             )
                             Text(
                                 modifier = Modifier.padding(16.dp),
-                                text = "0",
+                                text = quantityUi.value.toString(),
                                 style = Typography.h2
                             )
                             Image(
                                 painter = painterResource(id = R.drawable.plus_fill),
-                                contentDescription = null
+                                contentDescription = null,
+                                Modifier.clickable {
+                                    quantityUi.value++
+                                }
                             )
                         }
                     }
@@ -329,14 +437,30 @@ class ProductDetailFragment : BaseComposeFragment() {
 
                     Button(
                         onClick = {
-                            val car = Car().apply {
-                                id = UUID.randomUUID().toString()
-                                name = nameState.value
-                                price = 100.0
-                                account_id = PreferencesManager.instance.get(SharedPreferenceKeys.USER_ID)
+                            if (carUi.value == null) {
+                                val newCar = Car().apply {
+                                    id = UUID.randomUUID().toString()
+                                    name = nameState.value
+                                    price = 100.0
+                                    account_id =
+                                        PreferencesManager.instance.get(SharedPreferenceKeys.USER_ID)
+                                }
+                                delegate!!.onUpdateCare()
+                                viewModel.createProduct(newCar,image)
+                            } else {
+                                this@ProductDetailFragment.car?.apply {
+                                    this.name = nameState.value
+                                    this.brand = brand.value
+                                    this.info = productInf.value
+                                    this.model = model.value
+                                    this.price = priceUi.value
+                                    this.quantity = quantityUi.value
+                                }
+                                viewModel.setCar(car)
+                                viewModel.createProduct(car = car!!,image)
+
                             }
-                            delegate!!.onUpdateCare()
-                            viewModel.createProduct(car)
+
                         },
                         shape = RoundedCornerShape(8.dp),
                         colors = ButtonDefaults.buttonColors(backgroundColor = AppColor.Red),
@@ -347,7 +471,7 @@ class ProductDetailFragment : BaseComposeFragment() {
                             .wrapContentHeight()
                     ) {
                         Text(
-                            text = "Create",
+                            text = "Create".takeIf { carUi.value == null } ?: "Update",
                             style = Typography.h2.copy(color = AppColor.WhiteText),
                             textAlign = TextAlign.Center,
                             modifier = Modifier.padding(horizontal = 16.dp)
@@ -425,7 +549,29 @@ class ProductDetailFragment : BaseComposeFragment() {
         }
     }
 
-    interface Delegate{
+    @Composable
+    fun AppDropdownMenu(
+        items: List<String>,
+        expand: Boolean,
+        offset: DpOffset,
+        modifier: Modifier,
+        onDismiss: () -> Unit,
+        onItemClick: (String) -> Unit
+    ) {
+        DropdownMenu(expanded = expand, offset = offset, onDismissRequest = onDismiss) {
+            items.forEach {
+                Text(
+                    text = it,
+                    modifier = modifier.clickable {
+                        onItemClick.invoke(it)
+                        onDismiss.invoke()
+                    }
+                )
+            }
+        }
+    }
+
+    interface Delegate {
         fun onUpdateCare()
     }
 }

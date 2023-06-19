@@ -4,15 +4,17 @@ import android.os.Parcelable
 import com.rom.garagely.constant.Constant.PRODUCT
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.parcel.RawValue
+import java.io.Serializable
 import java.util.UUID
 
 @Parcelize
 data class Car(
-    var id: String,
+    override var id: String,
     var name: String? = null,
     var price: Double = 0.0,
     var brand: String? = null,
-    val model: String? = null,
+    var model: String? = null,
+    var info: String? = null,
     var status: Status = Status.OPERATING,
     var keys: MutableList<Key> = mutableListOf(),
     var image: String? = null,

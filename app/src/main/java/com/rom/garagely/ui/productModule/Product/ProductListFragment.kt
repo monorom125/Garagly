@@ -4,6 +4,7 @@ import AppColor
 import android.os.Bundle
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -24,6 +25,7 @@ import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
+import androidx.compose.material.Divider
 import androidx.compose.material.Icon
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
@@ -54,6 +56,9 @@ class ProductListFragment : BaseComposeFragment() {
 
 
     private val viewModel: ProductListViewModel by viewModels()
+
+    lateinit var productDetailFragment: ProductDetailFragment
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         (activity as MainActivity).setTitle("Product")
@@ -65,7 +70,16 @@ class ProductListFragment : BaseComposeFragment() {
         MainView(viewModel)
     }
 
+    private fun goToProductDetail(car: Car?) {
 
+        (activity as MainActivity).pushStack(ProductDetailFragment.newInstance(car).apply {
+            delegate = object : ProductDetailFragment.Delegate {
+                override fun onUpdateCare() {
+                    viewModel.getProducts()
+                }
+            }
+        })
+    }
 
     @Composable
     fun MainView(viewModel: ProductListViewModel) {
@@ -81,10 +95,12 @@ class ProductListFragment : BaseComposeFragment() {
             color = AppColor.Background
         ) {
             Column(Modifier.fillMaxSize()) {
+
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .wrapContentHeight(),
+                        .wrapContentHeight()
+                        .padding(bottom = 8.dp),
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
@@ -94,7 +110,7 @@ class ProductListFragment : BaseComposeFragment() {
                             textState.value = it
                         },
                         modifier = Modifier
-                            .padding(vertical = 16.dp)
+                            .padding(vertical = 16.dp, horizontal = 16.dp)
                             .fillMaxWidth(0.3f),
                         textStyle = Typography.body1,
                         singleLine = true,
@@ -131,7 +147,7 @@ class ProductListFragment : BaseComposeFragment() {
 
 
                     Button(
-                        onClick = { (activity as MainActivity).pushStack(ProductDetailFragment()) },
+                        onClick = { goToProductDetail(null) },
                         shape = RoundedCornerShape(8.dp),
                         colors = ButtonDefaults.buttonColors(backgroundColor = AppColor.Red),
                         modifier = Modifier
@@ -161,9 +177,16 @@ class ProductListFragment : BaseComposeFragment() {
                         this.FilterHeaderItem(header = header)
                     }
                 }
+                Divider(modifier = Modifier.fillMaxWidth()
+                    .padding(horizontal = 8.dp)
+                    .height(1.dp)
+                    .background(AppColor.Line))
+
                 LazyColumn {
                     items(products.size) {
-                        ProductItem(index = it, car = products[it])
+                        ProductItem(index = it, car = products[it]) { car ->
+                            goToProductDetail(car)
+                        }
                     }
                 }
             }
@@ -195,10 +218,13 @@ fun RowScope.FilterHeaderItem(header: Header) {
 }
 
 @Composable
-fun ProductItem(index: Int, car: Car) {
+fun ProductItem(index: Int, car: Car, onItemClick: (Car) -> Unit) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
+            .clickable {
+                onItemClick.invoke(car)
+            }
             .background(color = AppColor.SearchBackground.takeIf { index % 2 != 0 }
                 ?: AppColor.Background),
         verticalAlignment = Alignment.CenterVertically,

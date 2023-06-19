@@ -27,4 +27,8 @@ object AppModule {
     @Singleton
     fun providePreferencesManager(): PreferencesManager = PreferencesManager.instance
 
+    @Provides
+    @Singleton
+    fun provideFireBaseStorage(): FirebaseStorage = FirebaseStorage.getInstance()
+
 }
