@@ -15,7 +15,7 @@ data class Car(
     var brand: String? = null,
     var model: String? = null,
     var info: String? = null,
-    var status: Status = Status.OPERATING,
+    var status: Status = Status.Sell,
     var keys: MutableList<Key> = mutableListOf(),
     var image: String? = null,
     var quantity: Int = 0,
@@ -25,8 +25,8 @@ data class Car(
     constructor() : this(id = UUID.randomUUID().toString(), name = "", brand = null, model = null)
 
     enum class Status {
-        OPERATING,
-        WAITING,
+        Sell,
+        Rent,
         DONE,
     }
 
@@ -35,6 +35,6 @@ data class Car(
 }
 
 @Parcelize
-data class Key(val name: String?, val price: Double?) : Parcelable{
-    constructor() : this(null,null)
+data class Key(val id: String, var name: String, var price: Double) : Parcelable{
+    constructor() : this(id = UUID.randomUUID().toString(),"",0.00)
 }

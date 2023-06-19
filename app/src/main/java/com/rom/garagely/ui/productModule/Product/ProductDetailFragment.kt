@@ -39,9 +39,11 @@ import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.toMutableStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -60,6 +62,7 @@ import com.rom.garagely.composeView.CoilImageLoader
 import com.rom.garagely.constant.IntentKey
 import com.rom.garagely.constant.SharedPreferenceKeys
 import com.rom.garagely.model.Car
+import com.rom.garagely.model.Key
 import com.rom.garagely.theme.Typography
 import com.rom.garagely.ui.base.BaseComposeFragment
 import dagger.hilt.android.AndroidEntryPoint
@@ -68,7 +71,7 @@ import java.util.UUID
 @AndroidEntryPoint
 class ProductDetailFragment : BaseComposeFragment() {
 
-    private var image : Uri ? = null
+    private var image: Uri? = null
 
     companion object {
         fun newInstance(car: Car?): ProductDetailFragment {
@@ -131,12 +134,17 @@ class ProductDetailFragment : BaseComposeFragment() {
             mutableStateOf((carUi.value?.image)?.toUri())
         }
 
+        val keys = remember {
+            (carUi.value?.keys ?: listOf()).toMutableStateList()
+        }
+
         var expand by remember {
             mutableStateOf(false)
         }
         val singlePhotoPickerLauncher = rememberLauncherForActivityResult(
             contract = ActivityResultContracts.PickVisualMedia(),
-            onResult = { uri-> image = uri
+            onResult = { uri ->
+                image = uri
                 uri?.let {
                     imageUrl.value = uri
                 }
@@ -404,11 +412,20 @@ class ProductDetailFragment : BaseComposeFragment() {
                             .padding(start = 24.dp)
                             .fillMaxWidth(0.7f)
                     )
-                    val keys = remember {
-                        mutableStateOf<ArrayList<Int>>(arrayListOf(1))
+                    keys.forEachIndexed { index, key ->
+                        ItemKey(key = key) { updateKey, isRemove ->
+                            if (!isRemove) {
+                                keys[index] = updateKey
+                            } else {
+                                keys.remove(updateKey)
+                            }
+                        }
                     }
-                    keys.value.forEach {
-                        ItemKey(i = it)
+                    ItemKey(key = Key(), true) { key, isNew ->
+                        if (isNew) {
+                            keys.add(key)
+                        }
+
                     }
                 }
 
@@ -441,12 +458,15 @@ class ProductDetailFragment : BaseComposeFragment() {
                                 val newCar = Car().apply {
                                     id = UUID.randomUUID().toString()
                                     name = nameState.value
-                                    price = 100.0
-                                    account_id =
-                                        PreferencesManager.instance.get(SharedPreferenceKeys.USER_ID)
+                                    account_id = PreferencesManager.instance.get(SharedPreferenceKeys.USER_ID)
+                                    this.info = productInf.value
+                                    this.model = model.value
+                                    this.price = priceUi.value
+                                    this.quantity = quantityUi.value
+                                    this.keys = keys.filter { it.name.isNotEmpty() }.toMutableList()
                                 }
                                 delegate!!.onUpdateCare()
-                                viewModel.createProduct(newCar,image)
+                                viewModel.createProduct(newCar, image)
                             } else {
                                 this@ProductDetailFragment.car?.apply {
                                     this.name = nameState.value
@@ -455,9 +475,10 @@ class ProductDetailFragment : BaseComposeFragment() {
                                     this.model = model.value
                                     this.price = priceUi.value
                                     this.quantity = quantityUi.value
+                                    this.keys = keys.filter { it.name.isNotEmpty() }.toMutableList()
                                 }
                                 viewModel.setCar(car)
-                                viewModel.createProduct(car = car!!,image)
+                                viewModel.createProduct(car = car!!, image)
 
                             }
 
@@ -483,26 +504,41 @@ class ProductDetailFragment : BaseComposeFragment() {
     }
 
     @Composable
-    fun ItemKey(i: Int) {
+    fun ItemKey(key: Key, isNew: Boolean = false, onItemChange: (Key, Boolean) -> Unit) {
+
+        val keyState = remember {
+            mutableStateOf(key)
+        }
+        val text = remember {
+            mutableStateOf(key.name)
+        }
+
+        val price = remember {
+            mutableStateOf(key.price)
+        }
+
 
         Row(
             modifier = Modifier
+                .padding(bottom = 12.dp)
                 .fillMaxWidth(0.7f),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            val keyName = remember {
-                mutableStateOf("")
-            }
-            val priceName = remember {
-                mutableStateOf("")
-            }
+
             Image(
-                painter = painterResource(id = R.drawable.plus_fill), contentDescription = null
+                painter = painterResource(id = R.drawable.plus_fill.takeIf { key.name.isEmpty() && isNew }
+                    ?: R.drawable.ic_minus), contentDescription = null,
+                modifier = Modifier.clickable {
+                    onItemChange.invoke(key, true)
+                }
             )
             OutlinedTextField(
-                value = keyName.value,
+                value = text.value,
                 onValueChange = {
-                    keyName.value = it
+                    text.value = it
+                    keyState.value.name = it
+                    onItemChange.invoke(keyState.value, false)
+
                 },
                 modifier = Modifier
                     .weight(1f)
@@ -524,9 +560,11 @@ class ProductDetailFragment : BaseComposeFragment() {
                 )
             )
             OutlinedTextField(
-                value = priceName.value,
+                value = price.value.toString(),
                 onValueChange = {
-                    priceName.value = it
+                    price.value = it.toDouble()
+                    keyState.value.price = it.toDouble()
+                    onItemChange.invoke(keyState.value, false)
                 },
                 modifier = Modifier
                     .weight(1f)
