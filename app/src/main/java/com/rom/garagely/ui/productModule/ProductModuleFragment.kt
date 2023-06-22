@@ -11,6 +11,7 @@ import com.rom.garagely.common.init
 import com.rom.garagely.databinding.FragmentProductModuleBinding
 import com.rom.garagely.ui.base.BaseFragment
 import com.rom.garagely.ui.productModule.Product.ProductListFragment
+import com.rom.garagely.ui.productModule.category.BrandFragment
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -26,20 +27,48 @@ class ProductModuleFragment : BaseFragment<FragmentProductModuleBinding>() {
     override val layoutResource: Int
         get() = R.layout.fragment_product_module
 
+    private val productListFragment by lazy {
+        ProductListFragment()
+    }
+    private val brandFragment by lazy {
+        BrandFragment()
+    }
+
     private val adapter = ProductMenuAdapter()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         adapter.set(Menu.values().toList())
         binding.rvMenu.init(adapter)
-        showProductListFragment()
+
+        childFragmentManager.commit {
+            add(binding.productContainer.id, productListFragment, productListFragment.id.toString())
+        }
+
+        adapter.setDelegate { item, _ ->
+            when (item) {
+                Menu.Product -> {
+                    replaceFragment(productListFragment)
+                }
+
+                Menu.Brand -> {
+                    replaceFragment(brandFragment)
+
+                }
+
+                Menu.Tax -> {
+                }
+
+                else -> {
+
+                }
+            }
+        }
     }
 
-    private fun showProductListFragment(){
-        val fragment = ProductListFragment()
+    private fun replaceFragment(fragment: Fragment) {
         childFragmentManager.commit {
-            add(binding.productContainer.id,fragment,fragment.id.toString())
-            addToBackStack(fragment.id.toString())
+            replace(binding.productContainer.id, fragment, fragment.tag.toString())
         }
     }
 

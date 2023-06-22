@@ -21,6 +21,17 @@ suspend fun FirebaseFirestore.upsert(
 }
 
 suspend fun FirebaseStorage.uploadImage(path: String, image: Uri): String {
-    val result = this.reference.child("products/images").putFile(image).await()
+    val result = this.reference.child(path).putFile(image).await()
     return result.storage.downloadUrl.await().toString()
+}
+
+suspend fun FirebaseFirestore.delete(
+    model: BaseModel, onSuccess: (Boolean) -> Unit,
+    onFailure: (String) -> Unit
+) {
+    this.collection(model.pathName).document(model.id).delete().addOnCompleteListener {
+        onSuccess.invoke(it.isSuccessful)
+    }.addOnCompleteListener {
+        onFailure.invoke(it.exception?.message ?: "")
+    }
 }

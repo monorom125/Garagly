@@ -27,13 +27,11 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
         }
     }
 
+    var delegate: Delegate? = null
     private var currentFragment: Fragment? = null
-
     private var selectedDate = Date()
-
     private var user: User? = null
     private var topStackTag: String? = null
-
     private val backStackFragmentNames = arrayListOf<String>()
 
     override val layoutResource: Int
@@ -105,14 +103,28 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
         }
         backStackFragmentNames.add(tag)
     }
+
     fun popStack() {
         if (supportFragmentManager.backStackEntryCount > 1) {
             topStackTag =
                 supportFragmentManager.getBackStackEntryAt(supportFragmentManager.backStackEntryCount - 2).name
             supportFragmentManager.popBackStack()
+            updateFragment()
         } else {
             finish()
         }
     }
 
+    fun updateFragment() {
+        currentFragment =
+            supportFragmentManager.fragments.firstOrNull { it.tag == topStackTag }
+        delegate?.popBack()
+
+    }
+
+
+    interface Delegate {
+
+        fun popBack() {}
+    }
 }

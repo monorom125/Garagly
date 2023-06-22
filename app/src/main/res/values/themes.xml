@@ -37,6 +37,7 @@
         <item name="indicatorColor">@color/colorOrange</item>
         <item name="itemTextAppearanceActive">?attr/textAppearanceLabelMedium</item>
         <item name="itemTextAppearanceInactive">?attr/textAppearanceBodySmall</item>
+        <item name="itemTextColor">@color/item_color</item>
         <item name="itemIconTint">@color/nivation_rail_color</item>
         <item name="fontFamily">@font/poppins_regular</item>
 

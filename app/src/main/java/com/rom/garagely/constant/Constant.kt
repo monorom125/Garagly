@@ -4,5 +4,7 @@ object Constant {
     const val USER_COLLECTION = "user"
     const val SPACE_COLLECTION  = "space"
     const val  PRODUCT ="product"
+    const val BRAND = "brand"
+    const val DISCOUNT = "discount"
 
 }

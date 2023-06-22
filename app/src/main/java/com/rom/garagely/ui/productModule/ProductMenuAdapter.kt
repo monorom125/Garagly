@@ -24,6 +24,9 @@ class ProductMenuAdapter : BaseRecyclerViewAdapter<ProductModuleFragment.Menu, P
     inner class MenuItemViewHolder(binding: ItemProductMenuBinding) : BaseViewHolder<ItemProductMenuBinding>(binding = binding ){
             fun onBind(menu : ProductModuleFragment.Menu){
                 binding.textViewMenuName.text = menu.name
+                binding.root.setOnClickListener {
+                    action?.invoke(menu,adapterPosition)
+                }
             }
     }
 }

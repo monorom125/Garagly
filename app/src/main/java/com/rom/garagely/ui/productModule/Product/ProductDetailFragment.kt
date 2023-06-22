@@ -517,7 +517,6 @@ class ProductDetailFragment : BaseComposeFragment() {
             mutableStateOf(key.price)
         }
 
-
         Row(
             modifier = Modifier
                 .padding(bottom = 12.dp)

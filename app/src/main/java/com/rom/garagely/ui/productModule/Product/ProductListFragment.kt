@@ -49,6 +49,7 @@ import com.rom.garagely.R
 import com.rom.garagely.model.Car
 import com.rom.garagely.theme.Typography
 import com.rom.garagely.ui.base.BaseComposeFragment
+import com.rom.garagely.ui.productModule.ProductModuleFragment
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -56,8 +57,6 @@ class ProductListFragment : BaseComposeFragment() {
 
 
     private val viewModel: ProductListViewModel by viewModels()
-
-    lateinit var productDetailFragment: ProductDetailFragment
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -192,6 +191,7 @@ class ProductListFragment : BaseComposeFragment() {
             }
         }
     }
+
 }
 
 @Composable
@@ -225,7 +225,7 @@ fun ProductItem(index: Int, car: Car, onItemClick: (Car) -> Unit) {
             .clickable {
                 onItemClick.invoke(car)
             }
-            .background(color = AppColor.SearchBackground.takeIf { index % 2 != 0 }
+            .background(color = AppColor.SearchBackground.takeIf { index % 2 == 0 }
                 ?: AppColor.Background),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center
