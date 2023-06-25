@@ -13,13 +13,17 @@
         android:theme="@style/Theme.Garagely"
         tools:targetApi="31">
         <activity
+            android:name=".ui.CreateClientActivity"
+            android:exported="false"
+            android:label="@string/title_activity_create_client"
+            android:theme="@style/Theme.Garagely" />
+        <activity
             android:name=".ui.loginByPin.LoginPinCodeActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
-
             </intent-filter>
         </activity>
         <activity

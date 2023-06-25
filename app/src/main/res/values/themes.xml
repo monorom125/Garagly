@@ -98,4 +98,66 @@
         <item name="android:background">@drawable/selector_fed</item>
     </style>
 
+    <!--    EditText Style-->
+
+    <!--    TextInputLayout-->
+    <style name="TextInputLayout" parent="Widget.Design.TextInputLayout">
+        <item name="android:textSize">14sp</item>
+        <item name="errorTextAppearance">@color/color_red</item>
+        <item name="prefixTextAppearance">@style/TextInputEditText.Text.Appearance</item>
+        <item name="hintTextColor">@color/colorDefault</item>
+        <item name="boxStrokeColor">@color/waiterTitle</item>
+        <item name="android:textColorHint">@color/colorDefault</item>
+        <item name="placeholderTextColor">@color/colorDefault</item>
+        <item name="android:fontFamily">@font/poppins_medium</item>
+    </style>
+
+    <style name="TextInputLayout.Outline" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="android:textSize">12sp</item>
+        <item name="errorTextAppearance">@style/TextInputEditText.Error.Text.Appearance</item>
+        <item name="prefixTextAppearance">@style/TextInputEditText.Text.Appearance</item>
+        <item name="android:textColorHint">@color/colorDefault</item>
+        <item name="hintTextColor">@color/colorDefault</item>
+        <item name="android:fontFamily">@font/poppins_medium</item>
+        <item name="boxStrokeColor">@color/waiterTitle</item>
+        <item name="placeholderTextColor">@color/colorDefault</item>
+        <item name="android:layout_height">48dp</item>
+        <item name="boxCornerRadiusBottomEnd">8dp</item>
+        <item name="boxCornerRadiusBottomStart">8dp</item>
+        <item name="boxCornerRadiusTopStart">8dp</item>
+        <item name="boxCornerRadiusTopEnd">8dp</item>
+        <item name="endIconTint">@null</item>
+        <item name="endIconMode">custom</item>
+    </style>
+
+    <!--    TextInputEditText-->
+    <style name="TextInputEditText" parent="Widget.AppCompat.EditText">
+        <item name="android:inputType">text</item>
+        <item name="android:textSize">1sp</item>
+        <item name="android:colorControlActivated">@color/colorDefault</item>
+        <item name="android:colorActivatedHighlight">@color/colorDefault</item>
+        <item name="android:colorControlNormal">@color/colorDefault</item>
+        <item name="android:fontFamily">@font/poppins_medium</item>
+        <item name="android:textColor">@color/color_light_black_text</item>
+        <item name="android:textCursorDrawable">@drawable/cour</item>
+        <item name="errorTextAppearance">@style/TextInputEditText.Error.Text.Appearance</item>
+    </style>
+
+    <style name="TextInputEditText.Text.Appearance" parent="TextAppearance.AppCompat.Body2">
+        <item name="android:fontFamily">@font/poppins_medium</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="android:textColor">@color/color_light_black_text</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="TextInputEditText.Error.Text.Appearance" parent="TextAppearance.Design.Error">
+        <item name="android:fontFamily">@font/poppins_medium</item>
+        <item name="android:textColor">@color/color_red</item>
+    </style>
+    <!-- Base application theme. -->
+    <style name="Base.Theme.Garagely" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- Customize your light theme here. -->
+        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+    </style>
+
 </resources>

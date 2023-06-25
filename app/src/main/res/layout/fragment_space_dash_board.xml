@@ -8,81 +8,81 @@
         android:layout_height="match_parent"
         tools:context=".ui.reparingManagement.dashboard.SpaceDashBoardFragment">
 
-        <View
-            android:id="@+id/header_title"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:background="@color/colorOrange"
-            app:layout_constraintBottom_toBottomOf="@id/textViewTitle"
-            app:layout_constraintTop_toTopOf="@+id/textViewTitle" />
-
         <TextView
-            android:id="@+id/textViewTitle"
-            style="@style/TextViewStyle.Bold"
-            android:layout_width="wrap_content"
+            android:id="@+id/tv_new_client"
+            style="@style/TextViewStyle"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:padding="8dp"
-            android:text="@string/operating"
-            android:textColor="@color/white"
+            android:drawableStart="@drawable/ic_add"
+            android:drawablePadding="24dp"
+            android:paddingVertical="16dp"
+            android:paddingStart="24dp"
+            android:text="Add Client"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <View
-            android:layout_width="1dp"
-            android:layout_height="match_parent"
-            android:background="@color/line_divider_view"
-            app:layout_constraintEnd_toEndOf="parent" />
-
-        <RadioGroup
-            android:id="@+id/radioView"
-            style="@style/ButtonStyle"
-            android:layout_width="200dp"
-            android:layout_height="48dp"
-            android:layout_marginTop="24dp"
-            android:background="@drawable/backgroud_radio_button"
-            android:clipChildren="true"
-            android:gravity="center_horizontal"
-            android:orientation="horizontal"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/header_title">
-
-            <RadioButton
-                android:id="@+id/operatingCheck"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_margin="2dp"
-                android:layout_weight="1"
-                android:background="@drawable/selected_background_radio_item"
-                android:button="@null"
-                android:checked="true"
-                android:gravity="center"
-                android:text="@string/operating"
-                android:textColor="@color/radio_buttom_selected_item_text_color" />
-
-
-            <RadioButton
-                android:id="@+id/bookingCheck"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_margin="2dp"
-                android:layout_weight="1"
-                android:background="@drawable/selected_background_radio_item"
-                android:button="@null"
-                android:gravity="center"
-                android:text="@string/booking"
-                android:textColor="@color/radio_buttom_selected_item_text_color" />
-
-        </RadioGroup>
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/operating_recycle_view"
+            android:id="@+id/view_line"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_marginTop="24dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/radioView" />
+            android:layout_height="1dp"
+            android:background="@color/line_divider_view"
+            app:layout_constraintTop_toBottomOf="@id/tv_new_client" />
+
+        <LinearLayout
+            android:id="@+id/layout_order_header"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="10"
+            app:layout_constraintTop_toBottomOf="@id/view_line">
+
+            <TextView
+                style="@style/TextViewStyle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="4"
+                android:paddingVertical="8dp"
+                android:paddingStart="24dp"
+                android:text="Car" />
+
+            <TextView
+                style="@style/TextViewStyle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:paddingVertical="8dp"
+                android:paddingStart="24dp"
+                android:text="Qty" />
+
+            <TextView
+                style="@style/TextViewStyle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:paddingVertical="8dp"
+                android:paddingStart="24dp"
+                android:text="Price" />
+
+            <TextView
+                style="@style/TextViewStyle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:paddingVertical="8dp"
+                android:paddingStart="24dp"
+                android:text="Total" />
+
+
+        </LinearLayout>
+        <View
+            android:id="@+id/view_line_divider"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/line_divider_view"
+            app:layout_constraintTop_toBottomOf="@id/layout_order_header" />
+
+
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 
