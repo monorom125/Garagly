@@ -36,7 +36,7 @@ abstract class BaseRecyclerViewAdapter<T, VH : RecyclerView.ViewHolder>(
         notifyDataSetChanged()
     }
 
-    open fun add(data: T){
+    open fun add(data: T) {
         items.add(data)
         notifyItemInserted(items.lastIndex)
     }
@@ -149,7 +149,8 @@ abstract class BaseRecyclerViewAdapter<T, VH : RecyclerView.ViewHolder>(
         if (parentHeight > 0) {
             completion.invoke(parentHeight)
         } else {
-            recyclerView?.viewTreeObserver?.addOnGlobalLayoutListener(object: ViewTreeObserver.OnGlobalLayoutListener {
+            recyclerView?.viewTreeObserver?.addOnGlobalLayoutListener(object :
+                ViewTreeObserver.OnGlobalLayoutListener {
                 override fun onGlobalLayout() {
                     parentHeight = recyclerView?.height ?: 0
                     completion.invoke(parentHeight)

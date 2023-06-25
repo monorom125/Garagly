@@ -5,10 +5,11 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.rom.garagely.databinding.ItemSpaceBinding
+import com.rom.garagely.model.Brand
 import com.rom.garagely.model.GarageSpace
 import com.rom.garagely.ui.base.BaseRecyclerViewAdapter
 
-class SpaceRecycleViewAdapter : BaseRecyclerViewAdapter<GarageSpace, SpaceRecycleViewAdapter.SpaceViewHolder>() {
+class SpaceRecycleViewAdapter : BaseRecyclerViewAdapter<Brand, SpaceRecycleViewAdapter.SpaceViewHolder>() {
 
     override fun onCreateItemHolder(
         inflater: LayoutInflater,
@@ -19,14 +20,14 @@ class SpaceRecycleViewAdapter : BaseRecyclerViewAdapter<GarageSpace, SpaceRecycl
     }
 
     override fun onBindItemHolder(holder: SpaceViewHolder, position: Int, context: Context) {
-        holder.bind(space = items[position])
+        holder.bind(brand = items[position])
     }
 
     inner class SpaceViewHolder(binding: ItemSpaceBinding) :
         BaseViewHolder<ItemSpaceBinding>(binding) {
 
-        fun bind(space: GarageSpace) {
-            binding.textViewSpace.text = space.name
+        fun bind(brand: Brand) {
+            binding.textViewSpace.text = brand.name
         }
     }
 }

@@ -1,6 +1,7 @@
 package com.rom.garagely.ui.productModule.category
 
 import AppColor
+import android.os.Bundle
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -12,7 +13,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
-import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -35,7 +35,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -56,17 +55,19 @@ class BrandFragment : BaseComposeFragment() {
     private val mainActivity : MainActivity?
         get() = activity as? MainActivity
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        initFragment()
+    }
     @Composable
     override fun ContentView() {
         BrandView()
-        InitFragment()
     }
-
 
     @Composable
     fun BrandView() {
 
-        val brands by viewModel.brands.collectAsState()
+        val brands = viewModel.brands.collectAsState()
 
         val searchState = remember {
             mutableStateOf("")
@@ -180,8 +181,8 @@ class BrandFragment : BaseComposeFragment() {
                 LazyVerticalGrid(columns = GridCells.Fixed(3), modifier = Modifier
                     .fillMaxWidth()
                     .padding(start = 24.dp, end = 8.dp), content = {
-                    items(brands.size) {
-                        BrandItem(brands[it]){brand->
+                    items(brands.value.size) {
+                        BrandItem(brands.value[it]){brand->
                             (activity as MainActivity).pushStack(BrandDetail.newInstance(brand))
                         }
                     }
@@ -233,7 +234,7 @@ class BrandFragment : BaseComposeFragment() {
         }
     }
 
-    private fun InitFragment(){
+    private fun initFragment(){
         mainActivity?.delegate = object : MainActivity.Delegate{
             override fun popBack() {
                 viewModel.getBrand()

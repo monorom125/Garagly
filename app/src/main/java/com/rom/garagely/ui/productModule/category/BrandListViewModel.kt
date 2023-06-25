@@ -12,6 +12,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
@@ -26,6 +27,7 @@ class BrandListViewModel @Inject constructor(
     init {
         getBrand()
     }
+
     fun getBrand() {
         viewModelScope.launch(Dispatchers.Default) {
             dp.collection(BRAND).whereEqualTo(
@@ -34,7 +36,7 @@ class BrandListViewModel @Inject constructor(
             )
                 .get()
                 .addOnCompleteListener {
-                    if (it.isSuccessful){
+                    if (it.isSuccessful) {
                         _brands.value = it.result.toObjects(Brand::class.java)
                     }
                 }

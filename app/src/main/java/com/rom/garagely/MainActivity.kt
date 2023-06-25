@@ -115,10 +115,9 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
         }
     }
 
-    fun updateFragment() {
-        currentFragment =
-            supportFragmentManager.fragments.firstOrNull { it.tag == topStackTag }
-        delegate?.popBack()
+    private fun updateFragment() {
+        currentFragment = supportFragmentManager.fragments.firstOrNull { it.tag == topStackTag }
+         delegate?.popBack()
 
     }
 

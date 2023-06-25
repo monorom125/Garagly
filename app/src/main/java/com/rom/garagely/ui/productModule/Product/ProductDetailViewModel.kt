@@ -31,7 +31,7 @@ class ProductDetailViewModel @Inject constructor(
     fun createProduct(car: Car, image: Uri?) {
         viewModelScope.launch(Dispatchers.IO) {
             image?.let {
-                car.image = storage.uploadImage("products/image", image)
+                car.image = storage.uploadImage("products/image/${car.id}", image)
             }
             firestore.upsert(car, onSuccess = {
                 _createProductStat.value = it

@@ -55,7 +55,7 @@
     </style>
 
     <style name="TextViewStyle.Bold" parent="TextViewStyle">
-        <item name="android:fontFamily">@font/poppins_bold</item>
+        <item name="android:fontFamily">@font/poppins_medium</item>
         <item name="android:fontWeight">500</item>
         <item name="android:textStyle">bold</item>
     </style>
@@ -68,6 +68,14 @@
         <item name="android:textColorHint">@color/colorHintText</item>
         <item name="android:inputType">text</item>
         <item name="android:imeOptions">actionDone</item>
+    </style>
+
+    <style name="DialogThemeCustom" parent="Theme.AppCompat.DayNight.Dialog">
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@color/white</item>
+        <item name="android:windowTranslucentStatus">true</item>
+        <item name="android:windowTranslucentNavigation">true</item>
     </style>
 
     <style name="ButtonStyle" parent="Widget.AppCompat.Button">

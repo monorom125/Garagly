@@ -8,8 +8,9 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.children
 import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.RecyclerView
+import androidx.viewbinding.ViewBinding
 
-open class BaseViewHolder<T : ViewDataBinding>(protected val binding: T) :
+open class BaseViewHolder<T : ViewBinding>(protected val binding: T) :
     RecyclerView.ViewHolder(binding.root) {
 
     protected val context: Context
