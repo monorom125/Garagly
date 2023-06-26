@@ -6,5 +6,7 @@ object Constant {
     const val  PRODUCT ="product"
     const val BRAND = "brand"
     const val DISCOUNT = "discount"
+    const val CLIENT = "client"
+
 
 }

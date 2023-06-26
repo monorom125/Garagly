@@ -1,14 +1,10 @@
 package com.rom.garagely.ui.reparingManagement.dashboard
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
-import androidx.lifecycle.ViewModel
 import com.rom.garagely.R
 import com.rom.garagely.databinding.FragmentSpaceDashBoardBinding
-import com.rom.garagely.ui.CreateClientActivity
+import com.rom.garagely.ui.client.CreateClientActivity
 import com.rom.garagely.ui.base.BaseFragment
 
 class SpaceDashBoardFragment : BaseFragment<FragmentSpaceDashBoardBinding>(){
@@ -25,6 +21,11 @@ class SpaceDashBoardFragment : BaseFragment<FragmentSpaceDashBoardBinding>(){
 
         binding.tvNewClient.setOnClickListener {
             createClient.launch("")
+        }
+
+        binding.tvNewClient.setOnClickListener {
+
+
         }
     }
 }

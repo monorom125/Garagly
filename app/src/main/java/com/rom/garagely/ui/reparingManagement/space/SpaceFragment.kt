@@ -38,7 +38,7 @@ class SpaceFragment : BaseFragment<FragmentSpaceBinding>() {
         setUpView()
     }
 
-    fun showProductDialog(car: Car){
+    private fun showProductDialog(car: Car){
         val dialogFragment = ProductDetailDialogFragment.newInstance(car)
         dialogFragment.show(childFragmentManager,null)
     }

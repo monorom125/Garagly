@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/backgroud_radio_button"
+    android:background="@drawable/backgrund_white_round_8dp"
     tools:context=".ui.reparingManagement.space.ProductDetailDialogFragment">
 
 
@@ -46,11 +46,24 @@
         app:layout_constraintTop_toBottomOf="@id/layout_header"
         app:layout_constraintWidth_percent="0.7">
 
+        <TextView
+            android:id="@+id/tv_keys"
+            style="@style/TextViewStyle.Bold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="24dp"
+            android:text="Car Options"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_keys"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:layout_marginStart="@dimen/dimen_16"
+            android:layout_marginTop="@dimen/dimen_16"
+            app:layout_constraintTop_toBottomOf="@id/tv_keys" />
 
         <TextView
             android:id="@+id/tv_info"
@@ -83,7 +96,7 @@
             android:layout_marginTop="24dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tv_brand"
-            tools:text="model"/>
+            tools:text="model" />
 
         <TextView
             android:id="@+id/tv_quantity"
@@ -94,7 +107,7 @@
             android:layout_marginTop="24dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tv_model"
-            tools:text="model"/>
+            tools:text="model" />
 
         <TextView
             android:id="@+id/tv_car_detail"
@@ -103,22 +116,21 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="24dp"
             android:layout_marginTop="24dp"
+            android:text="Detail"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_quantity"
-            android:text="Detail"/>
+            app:layout_constraintTop_toBottomOf="@id/tv_quantity" />
 
         <TextView
             style="@style/TextViewStyle"
             android:layout_width="match_parent"
             android:layout_height="90dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_car_detail"
-            android:layout_marginTop="16dp"
             android:layout_marginHorizontal="16dp"
-            android:text=""
+            android:layout_marginTop="16dp"
             android:background="@drawable/backgroud_radio_button"
-            android:backgroundTint="@color/colorOrange"/>
-
+            android:backgroundTint="@color/colorOrange"
+            android:text=""
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_car_detail" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -126,19 +138,57 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@id/info_layout"
         app:layout_constraintBottom_toBottomOf="@id/info_layout"
-        app:layout_constraintStart_toEndOf="@id/info_layout">
-        
-        <ImageView
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/info_layout"
+        app:layout_constraintTop_toTopOf="@id/info_layout">
+
+        <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="200dp"
-            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginHorizontal="24dp"
             android:layout_marginVertical="24dp"
-            android:src="@drawable/ic_car_holder"
-            android:layout_marginHorizontal="24dp"/>
-        
+            app:cardCornerRadius="8dp"
+            app:cardElevation="4dp"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:id="@+id/image_car"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:src="@drawable/ic_car_holder"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.cardview.widget.CardView>
+
+        <Button
+            android:id="@+id/btb_add"
+            style="@style/ButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="24dp"
+            android:layout_marginBottom="24dp"
+            android:text="Add"
+            android:textColor="@color/white"
+            android:background="@drawable/backgrund_white_round_8dp"
+            android:backgroundTint="@color/colorOrange"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <Button
+            android:id="@+id/btb_cancel"
+            style="@style/ButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="24dp"
+            android:text="@string/cancel"
+            android:textColor="@color/colorDefault"
+            android:background="@drawable/backgrund_white_round_8dp"
+            android:backgroundTint="@color/color_white_gray"
+            app:layout_constraintBottom_toBottomOf="@id/btb_add"
+            app:layout_constraintEnd_toStartOf="@id/btb_add"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 

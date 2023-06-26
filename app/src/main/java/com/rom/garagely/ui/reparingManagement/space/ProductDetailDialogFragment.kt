@@ -13,7 +13,14 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
+import com.bumptech.glide.Glide
+import com.google.android.flexbox.AlignItems
+import com.google.android.flexbox.FlexDirection
+import com.google.android.flexbox.FlexWrap
+import com.google.android.flexbox.FlexboxLayoutManager
+import com.google.android.flexbox.JustifyContent
 import com.rom.garagely.R
+import com.rom.garagely.common.init
 import com.rom.garagely.constant.IntentKey
 import com.rom.garagely.constant.IntentKey.CAR
 import com.rom.garagely.databinding.FragmentProductDetailDialogBinding
@@ -31,6 +38,10 @@ class ProductDetailDialogFragment : DialogFragment() {
                 }
             }
         }
+    }
+
+    private val oderKeysRecycleviewAdapter by lazy {
+        OderKeysRecycleviewAdapter()
     }
 
     private var car: Car? = null
@@ -61,8 +72,8 @@ class ProductDetailDialogFragment : DialogFragment() {
             setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
             addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
             navigationBarColor = ContextCompat.getColor(requireContext(), R.color.white)
-            val width = (resources.displayMetrics.widthPixels * 0.8).toInt()
-            val height = (resources.displayMetrics.heightPixels * 0.68).toInt()
+            val width = (resources.displayMetrics.widthPixels * 0.85).toInt()
+            val height = (resources.displayMetrics.heightPixels * 0.7).toInt()
             if (dialog != null) {
                 dialog!!.window!!.apply {
                     setLayout(width, height)
@@ -80,6 +91,7 @@ class ProductDetailDialogFragment : DialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        oderKeysRecycleviewAdapter.set(this.car?.keys?: listOf())
         setUpVIew(this.car!!)
     }
 
@@ -90,5 +102,18 @@ class ProductDetailDialogFragment : DialogFragment() {
         binding.tvBrand.text = "Brand : ${car.brand}"
         binding.tvModel.text = "Model : ${car.model}"
 
+        Glide.with(binding.root)
+            .load(car.image)
+            .fitCenter()
+            .placeholder(R.drawable.ic_car_holder)
+            .into(binding.imageCar)
+
+        val flexboxLayoutManager = FlexboxLayoutManager(context).apply {
+            flexDirection = FlexDirection.ROW
+            flexWrap = FlexWrap.WRAP
+            alignItems = AlignItems.FLEX_START
+            justifyContent = JustifyContent.FLEX_START
+        }
+        binding.rvKeys.init(oderKeysRecycleviewAdapter, flexboxLayoutManager)
     }
 }
