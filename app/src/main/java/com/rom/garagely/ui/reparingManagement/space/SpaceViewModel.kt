@@ -26,8 +26,8 @@ class SpaceViewModel @Inject constructor(
 ) : ViewModel() {
 
 
-    private val _brand = MutableLiveData<List<Brand>>()
-    val brand: LiveData<List<Brand>> get() = _brand
+    private val _brand = MutableLiveData<List<BrandFilterType>>()
+    val brand: LiveData<List<BrandFilterType>> get() = _brand
 
     private val _car = MutableLiveData<List<Car>>()
     val car: LiveData<List<Car>> get() = _car
@@ -45,8 +45,12 @@ class SpaceViewModel @Inject constructor(
                 .get()
                 .addOnCompleteListener {
                     if (it.isSuccessful) {
-                        val spaces = it.result.toObjects(Brand::class.java)
-                        _brand.postValue(spaces)
+                        val remoteBrand = it.result.toObjects(Brand::class.java)
+                            .map { brand -> BrandFilterType.BrandFilter(brand) }
+                        val brands = arrayListOf<BrandFilterType>(BrandFilterType.All)
+                        brands.addAll(remoteBrand)
+
+                        _brand.postValue(brands)
                     }
                 }
         }
@@ -61,10 +65,29 @@ class SpaceViewModel @Inject constructor(
                 )
                 .get()
                 .addOnCompleteListener {
-                    if(it.isSuccessful){
+                    if (it.isSuccessful) {
                         _car.postValue(it.result.toObjects(Car::class.java))
                     }
                 }
+        }
+    }
+
+    sealed class BrandFilterType() {
+        object All : BrandFilterType()
+        data class BrandFilter(val brand: Brand) : BrandFilterType()
+
+        fun getDisplayName(): String {
+            return when (this) {
+                All -> "All"
+                is BrandFilter -> this.brand.name
+            }
+        }
+
+        fun getBrandFilter(): Brand? {
+            return when (this) {
+                All -> null
+                is BrandFilter -> this.brand
+            }
         }
     }
 }

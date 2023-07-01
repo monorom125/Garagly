@@ -28,5 +28,6 @@
     <color name="colorLightWhite">#FAFAFA</color>
     <color name="colorWhiteGray">#F0F0F0</color>
     <color name="searchBackgroundA12">#1F767680</color>
+    <color name="colorBlue">#2D9CDB</color>
 
 </resources>

@@ -9,7 +9,7 @@ import com.rom.garagely.model.Brand
 import com.rom.garagely.model.GarageSpace
 import com.rom.garagely.ui.base.BaseRecyclerViewAdapter
 
-class SpaceRecycleViewAdapter : BaseRecyclerViewAdapter<Brand, SpaceRecycleViewAdapter.SpaceViewHolder>() {
+class SpaceRecycleViewAdapter : BaseRecyclerViewAdapter<SpaceViewModel.BrandFilterType, SpaceRecycleViewAdapter.SpaceViewHolder>() {
 
     override fun onCreateItemHolder(
         inflater: LayoutInflater,
@@ -26,8 +26,8 @@ class SpaceRecycleViewAdapter : BaseRecyclerViewAdapter<Brand, SpaceRecycleViewA
     inner class SpaceViewHolder(binding: ItemSpaceBinding) :
         BaseViewHolder<ItemSpaceBinding>(binding) {
 
-        fun bind(brand: Brand) {
-            binding.textViewSpace.text = brand.name
+        fun bind(brand: SpaceViewModel.BrandFilterType) {
+            binding.textViewSpace.text = brand.getDisplayName()
         }
     }
 }

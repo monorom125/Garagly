@@ -8,6 +8,37 @@
         android:layout_height="match_parent"
         tools:context=".ui.reparingManagement.dashboard.SpaceDashBoardFragment">
 
+        <LinearLayout
+            android:id="@+id/layout_tab_sell"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_sell_car"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+
+            <ImageButton
+                android:id="@+id/Add_mage"
+                android:layout_width="45dp"
+                android:layout_height="45dp"
+                android:background="@color/white"
+                android:src="@drawable/ic_add"
+                app:tint="@color/colorOrange" />
+
+        </LinearLayout>
+
+        <View
+            android:id="@+id/view_line_tab_sell"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/line_divider_view"
+            app:layout_constraintTop_toBottomOf="@id/layout_tab_sell" />
+
         <TextView
             android:id="@+id/tv_new_client"
             style="@style/TextViewStyle"
@@ -19,7 +50,7 @@
             android:paddingStart="24dp"
             android:text="Add Client"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@id/view_line_tab_sell" />
 
         <View
             android:id="@+id/view_line"
@@ -74,12 +105,79 @@
 
 
         </LinearLayout>
+
         <View
             android:id="@+id/view_line_divider"
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:background="@color/line_divider_view"
             app:layout_constraintTop_toBottomOf="@id/layout_order_header" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/buttonDiscount"
+            style="@style/ButtonStyle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dimen_16"
+            android:background="@drawable/background_color_blue_round_8dp"
+            android:drawableTop="@drawable/ic_discount_24dp"
+            android:backgroundTint="@color/color_red"
+            android:drawableTint="@color/colorTextWhite"
+            android:paddingHorizontal="@dimen/dimen_16"
+            android:paddingVertical="5dp"
+            android:text="@string/discount"
+            android:textColor="@color/colorLightWhite"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/buttonClear"
+            app:layout_constraintHorizontal_weight="0.25"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintWidth_min="80dp" />
+
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/buttonClear"
+            style="@style/ButtonStyle"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="@dimen/dimen_8"
+            android:background="@drawable/background_color_blue_round_8dp"
+            android:backgroundTint="@color/lightBlack"
+            android:drawableTop="@drawable/ic_clear"
+            android:drawableTint="@color/colorTextWhite"
+            android:paddingHorizontal="@dimen/dimen_16"
+            android:paddingTop="12dp"
+            android:text="@string/CLEAR"
+            android:textColor="@color/colorTextWhite"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="@id/buttonDiscount"
+            app:layout_constraintEnd_toStartOf="@id/buttonPay"
+            app:layout_constraintHorizontal_weight="0.25"
+            app:layout_constraintStart_toEndOf="@id/buttonDiscount"
+            app:layout_constraintTop_toTopOf="@id/buttonDiscount"
+            app:layout_constraintWidth_min="80dp" />
+
+
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/buttonPay"
+            style="@style/ButtonStyle.Bold"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="@dimen/dimen_8"
+            android:layout_marginEnd="@dimen/dimen_16"
+            android:background="@drawable/background_color_blue_round_8dp"
+            android:drawableTint="@color/white"
+            android:paddingHorizontal="@dimen/dimen_16"
+            android:paddingVertical="5dp"
+            android:text="@string/pay"
+            android:textColor="@color/colorTextWhite"
+            android:textSize="@dimen/medium_text_size"
+            app:layout_constraintBottom_toBottomOf="@id/buttonDiscount"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_weight="0.35"
+            app:layout_constraintStart_toEndOf="@id/buttonClear"
+            app:layout_constraintTop_toTopOf="@id/buttonDiscount" />
 
 
 

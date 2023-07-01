@@ -1,4 +1,4 @@
-
+package com.rom.garagely.ui.Dailog
 import BaseViewHolder
 import android.content.Context
 import android.view.LayoutInflater

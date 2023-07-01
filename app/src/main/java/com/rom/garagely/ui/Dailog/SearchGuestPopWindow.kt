@@ -1,6 +1,5 @@
 package com.rom.garagely.ui.Dailog
 
-import SelectCustomerAdapter
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -12,7 +11,7 @@ import com.rom.garagely.common.init
 import com.rom.garagely.databinding.SearchGuestLayoutBinding
 import com.rom.garagely.model.Client
 
-class SearchGuestPopup (context: Context, width: Int, height: Int = ViewGroup.LayoutParams.WRAP_CONTENT) : PopupWindow(width, height) {
+class SearchGuestPopWindow (context: Context, width: Int, height: Int = ViewGroup.LayoutParams.WRAP_CONTENT) : PopupWindow(width, height) {
 
     var delegate: Delegate? = null
 
@@ -41,6 +40,7 @@ class SearchGuestPopup (context: Context, width: Int, height: Int = ViewGroup.La
         binding.recyclerViewGuest.init(adapter)
         binding.textViewAddGuest.setOnClickListener {
             delegate?.onAddGuest()
+            isLocked = !isLocked
         }
 
     }

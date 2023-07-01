@@ -10,14 +10,15 @@ import com.rom.garagely.databinding.ItemSaleCarBinding
 import com.rom.garagely.model.Car
 import com.rom.garagely.ui.base.BaseRecyclerViewAdapter
 
-class CarSaleRecycleViewAdapter : BaseRecyclerViewAdapter<Car, CarSaleRecycleViewAdapter.CarSaleViewHolder>() {
+class CarSaleRecycleViewAdapter :
+    BaseRecyclerViewAdapter<Car, CarSaleRecycleViewAdapter.CarSaleViewHolder>() {
 
     override fun onCreateItemHolder(
         inflater: LayoutInflater,
         parent: ViewGroup,
         viewType: Int
     ): CarSaleViewHolder {
-        return  CarSaleViewHolder(ItemSaleCarBinding.inflate(inflater,parent,false))
+        return CarSaleViewHolder(ItemSaleCarBinding.inflate(inflater, parent, false))
     }
 
     override fun onBindItemHolder(
@@ -25,12 +26,23 @@ class CarSaleRecycleViewAdapter : BaseRecyclerViewAdapter<Car, CarSaleRecycleVie
         position: Int,
         context: Context
     ) {
-       holder.onBind(items[position])
+        holder.onBind(items[position])
     }
 
-    inner class CarSaleViewHolder(binding: ItemSaleCarBinding) : BaseViewHolder<ItemSaleCarBinding> (binding ){
+    inner class CarSaleViewHolder(binding: ItemSaleCarBinding) :
+        BaseViewHolder<ItemSaleCarBinding>(binding) {
 
-        fun onBind(car: Car){
+        init {
+            val parentWidth = recyclerView?.width ?: 0
+            val itemWidth =
+                (parentWidth - (getDimensionPixelOffset(R.dimen.dimen_16) * 3) - (getDimensionPixelOffset(
+                    R.dimen.dimen_24dp
+                )) * 2) / 4
+            binding.imageCar.layoutParams.height = (itemWidth * 0.7).toInt()
+            binding.root.clipToOutline = true
+        }
+
+        fun onBind(car: Car) {
             Glide.with(binding.root)
                 .load(car.image)
                 .placeholder(R.drawable.ic_car_holder)
@@ -40,7 +52,7 @@ class CarSaleRecycleViewAdapter : BaseRecyclerViewAdapter<Car, CarSaleRecycleVie
             binding.tvCarPrice.text = "$ ${car.price}"
 
             binding.root.setOnClickListener {
-                action?.invoke(car,adapterPosition)
+                action?.invoke(car, adapterPosition)
             }
         }
     }
