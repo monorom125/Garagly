@@ -384,9 +384,9 @@ class DiscountDetailFragment : BaseComposeFragment() {
                     }
 
                     Text(
-                        text = "Da",
+                        text = "Item",
                         modifier = Modifier
-                            .fillMaxWidth(0.7f)
+                            .fillMaxWidth()
                             .padding(top = 24.dp, bottom = 16.dp),
                         style = Typography.h2.copy(color = AppColor.Black),
                         textAlign = TextAlign.Left
@@ -451,7 +451,7 @@ class DiscountDetailFragment : BaseComposeFragment() {
                     horizontalArrangement = Arrangement.SpaceBetween
 
                 ) {
-                    if (viewModel.discount != null) {
+                    if (discount != null) {
                         Button(
                             onClick = { },
                             shape = RoundedCornerShape(8.dp),

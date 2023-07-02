@@ -9,9 +9,8 @@ import java.util.UUID
 data class Tax(
     override var id: String = UUID.randomUUID().toString(),
     var account_id: String? = null,
-    var products: MutableList<Car> = mutableListOf(),
-    var tax_amount: Double? = null,
-    var tax_percent: Double? = null,
+    var name: String? = null,
+    var tax_percent: Int? = null,
 ) : Parcelable, BaseModel() {
 
     override val pathName: String

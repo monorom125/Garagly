@@ -159,7 +159,7 @@ class DiscountListFragment : BaseComposeFragment() {
                 Row(
                     Modifier
                         .fillMaxWidth()
-                        .padding(horizontal = 8.dp)
+                        .padding(horizontal = 16.dp)
                         .height(IntrinsicSize.Min)
                         .wrapContentWidth()
 
@@ -176,7 +176,11 @@ class DiscountListFragment : BaseComposeFragment() {
                         .background(AppColor.Line)
                 )
 
-                LazyColumn(modifier = Modifier.fillMaxWidth()) {
+                LazyColumn(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp)
+                ) {
                     items(discounts.size) {
                         DiscountItem(
                             index = it,
@@ -205,7 +209,7 @@ class DiscountListFragment : BaseComposeFragment() {
         ) {
             Text(
                 modifier = Modifier
-                    .wrapContentSize()
+                    .wrapContentHeight()
                     .padding(vertical = 8.dp)
                     .weight(1f),
                 text = discount.name ?: "",
@@ -213,14 +217,14 @@ class DiscountListFragment : BaseComposeFragment() {
             )
             Text(
                 modifier = Modifier
-                    .wrapContentSize()
+                    .wrapContentHeight()
                     .weight(1f),
                 text = discount.discount_amount.toString(),
                 style = Typography.body2,
             )
             Text(
                 modifier = Modifier
-                    .wrapContentSize()
+                    .wrapContentHeight()
                     .padding(vertical = 8.dp)
                     .weight(1f),
                 text = discount.start_time.formatToString(),
@@ -228,7 +232,7 @@ class DiscountListFragment : BaseComposeFragment() {
             )
             Text(
                 modifier = Modifier
-                    .wrapContentSize()
+                    .wrapContentHeight()
                     .padding(vertical = 8.dp)
                     .weight(1f),
                 text = discount.end_time.formatToString(),
@@ -237,7 +241,7 @@ class DiscountListFragment : BaseComposeFragment() {
 
             Text(
                 modifier = Modifier
-                    .wrapContentSize()
+                    .wrapContentHeight()
                     .padding(vertical = 8.dp)
                     .weight(1f),
                 text = discount.status.name,

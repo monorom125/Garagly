@@ -1,8 +1,6 @@
-package com.rom.garagely.ui.productModule.Product
+package com.rom.garagely.ui.productModule.tax
 
 import AppColor
-import android.os.Bundle
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -10,8 +8,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.RowScope
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -36,7 +32,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -46,55 +41,43 @@ import androidx.compose.ui.unit.dp
 import androidx.fragment.app.viewModels
 import com.rom.garagely.MainActivity
 import com.rom.garagely.R
-import com.rom.garagely.model.Car
+import com.rom.garagely.model.Tax
 import com.rom.garagely.theme.Typography
 import com.rom.garagely.ui.base.BaseComposeFragment
-import com.rom.garagely.ui.productModule.ProductModuleFragment
+import com.rom.garagely.ui.productModule.Product.FilterHeaderItem
+import com.rom.garagely.ui.productModule.Product.Header
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class ProductListFragment : BaseComposeFragment() {
+class TaxListFragment : BaseComposeFragment() {
 
-
-    private val viewModel: ProductListViewModel by viewModels()
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        (activity as MainActivity).setTitle("Product")
-    }
+    private val viewModel: TaxListViewModel by viewModels()
 
     @Composable
     override fun ContentView() {
-
-        MainView(viewModel)
+        TaxList()
     }
 
-    private fun goToProductDetail(car: Car?) {
-
-        (activity as MainActivity).pushStack(ProductDetailFragment.newInstance(car).apply {
-            delegate = object : ProductDetailFragment.Delegate {
-                override fun onUpdateCare() {
-                    viewModel.getProducts()
-                }
-            }
-        })
+    private fun goToTaxDetail(tax: Tax?) {
+        (requireActivity() as MainActivity).pushStack(TaxDetailFramgent.newInstance(tax))
     }
 
     @Composable
-    fun MainView(viewModel: ProductListViewModel) {
+    fun TaxList() {
         val headers = remember {
-            viewModel.headers
+            mutableListOf<Header>()
         }
         val textState = remember {
             mutableStateOf("")
         }
-        val products by viewModel.product.collectAsState()
+        val taxs by viewModel.tax.collectAsState()
+
+
         Surface(
             modifier = Modifier.fillMaxSize(),
             color = AppColor.Background
         ) {
             Column(Modifier.fillMaxSize()) {
-
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -105,7 +88,7 @@ class ProductListFragment : BaseComposeFragment() {
                 ) {
                     BasicTextField(
                         value = textState.value,
-                        onValueChange = { it ->
+                        onValueChange = {
                             textState.value = it
                         },
                         modifier = Modifier
@@ -144,9 +127,10 @@ class ProductListFragment : BaseComposeFragment() {
                         }
                     )
 
-
                     Button(
-                        onClick = { goToProductDetail(null) },
+                        onClick = {
+                            goToTaxDetail(null)
+                        },
                         shape = RoundedCornerShape(8.dp),
                         colors = ButtonDefaults.buttonColors(backgroundColor = AppColor.Red),
                         modifier = Modifier
@@ -167,98 +151,67 @@ class ProductListFragment : BaseComposeFragment() {
                 Row(
                     Modifier
                         .fillMaxWidth()
-                        .padding(horizontal = 8.dp)
+                        .padding(horizontal = 16.dp)
                         .height(IntrinsicSize.Min)
                         .wrapContentWidth()
 
                 ) {
-                    headers.forEachIndexed { index, header ->
+                    viewModel.headers.forEachIndexed { index, header ->
                         this.FilterHeaderItem(header = header)
                     }
                 }
-                Divider(modifier = Modifier.fillMaxWidth()
-                    .padding(horizontal = 8.dp)
-                    .height(1.dp)
-                    .background(AppColor.Line))
+                Divider(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 8.dp)
+                        .height(1.dp)
+                        .background(AppColor.Line)
+                )
 
-                LazyColumn {
-                    items(products.size) {
-                        ProductItem(index = it, car = products[it]) { car ->
-                            goToProductDetail(car)
-                        }
+                LazyColumn(modifier = Modifier.fillMaxWidth()
+                    .padding(horizontal = 16.dp)
+                ) {
+                    items(taxs.size) {
+                        TaxItem(
+                            index = it,
+                            tax = taxs[it],
+                            onItemClick = { vat ->
+                                goToTaxDetail(vat)
+                            })
                     }
                 }
             }
         }
     }
 
-}
-
-@Composable
-fun RowScope.FilterHeaderItem(header: Header) {
-    Row(
-        modifier = Modifier
-            .weight(header.weight)
-            .fillMaxHeight()
-            .fillMaxWidth(),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.Start
-    ) {
-        Text(
-            modifier = Modifier.wrapContentSize(),
-            text = stringResource(id = header.name),
-            style = Typography.h3,
-        )
-        Image(
-            modifier = Modifier.padding(start = 4.dp),
-            painter = painterResource(id = header.orderBy.iconResource),
-            contentDescription = null
-        )
-    }
-}
-
-@Composable
-fun ProductItem(index: Int, car: Car, onItemClick: (Car) -> Unit) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clickable {
-                onItemClick.invoke(car)
-            }
-            .background(color = AppColor.SearchBackground.takeIf { index % 2 == 0 }
-                ?: AppColor.Background),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.Center
-    ) {
-        Text(
+    @Composable
+    fun TaxItem(index: Int, tax: Tax, onItemClick: (Tax) -> Unit) {
+        Row(
             modifier = Modifier
-                .wrapContentHeight()
-                .padding(vertical = 8.dp)
-                .weight(1f),
-            text = car.name ?: "",
-            style = Typography.body2,
-        )
-        Text(
-            modifier = Modifier
-                .weight(1f),
-            text = car.brand ?: "_",
-            style = Typography.body2,
-        )
-        Text(
-            modifier = Modifier
-                .wrapContentHeight()
-                .padding(vertical = 8.dp)
-                .weight(1f),
-            text = car.price.toString(),
-            style = Typography.body2,
-        )
-        Text(
-            modifier = Modifier
-                .wrapContentHeight()
-                .padding(vertical = 8.dp)
-                .weight(1f),
-            text = car.quantity.toString(),
-            style = Typography.body2,
-        )
+                .fillMaxWidth()
+                .clickable {
+                    onItemClick.invoke(tax)
+                }
+                .background(color = AppColor.SearchBackground.takeIf { index % 2 == 0 }
+                    ?: AppColor.Background),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Center
+        ) {
+            Text(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 8.dp)
+                    .weight(1f),
+                text = tax.name ?: "",
+                style = Typography.body2,
+            )
+            Text(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(1f),
+                text = tax.tax_percent.toString(),
+                style = Typography.body2,
+            )
+        }
     }
 }

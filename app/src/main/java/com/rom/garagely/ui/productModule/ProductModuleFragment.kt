@@ -13,6 +13,7 @@ import com.rom.garagely.ui.base.BaseFragment
 import com.rom.garagely.ui.productModule.Discount.DiscountListFragment
 import com.rom.garagely.ui.productModule.Product.ProductListFragment
 import com.rom.garagely.ui.productModule.category.BrandFragment
+import com.rom.garagely.ui.productModule.tax.TaxListFragment
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -36,6 +37,9 @@ class ProductModuleFragment : BaseFragment<FragmentProductModuleBinding>() {
     }
     private val discountListFragment by lazy {
         DiscountListFragment()
+    }
+    private val taxListFragment by lazy {
+        TaxListFragment()
     }
 
     private val adapter = ProductMenuAdapter()
@@ -61,6 +65,7 @@ class ProductModuleFragment : BaseFragment<FragmentProductModuleBinding>() {
                 }
 
                 Menu.Tax -> {
+                    replaceFragment(taxListFragment)
                 }
 
                 Menu.Discount -> {
