@@ -25,7 +25,7 @@ class SpaceFragment : BaseFragment<FragmentSpaceBinding>() {
     private val spaceRecyclerViewAdapter = SpaceRecycleViewAdapter()
     private val saleRecycleViewAdapter: CarSaleRecycleViewAdapter by lazy {
         CarSaleRecycleViewAdapter().apply {
-            setDelegate { item, position ->
+            setDelegate { item, _ ->
                 showProductDialog(item)
             }
         }
@@ -64,8 +64,6 @@ class SpaceFragment : BaseFragment<FragmentSpaceBinding>() {
             viewModel.car.observe(viewLifecycleOwner) {
                 saleRecycleViewAdapter.set(it)
             }
-
         }
     }
-
 }

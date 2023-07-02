@@ -1,10 +1,15 @@
 package com.rom.garagely.util
 
 import android.net.Uri
+import android.os.Build
+import androidx.annotation.RequiresApi
+import com.google.firebase.Timestamp
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import com.rom.garagely.model.BaseModel
 import kotlinx.coroutines.tasks.await
+import java.time.LocalDate
+import java.time.ZoneId
 
 suspend fun FirebaseFirestore.upsert(
     model: BaseModel,
@@ -12,9 +17,10 @@ suspend fun FirebaseFirestore.upsert(
     onFailure: (String) -> Unit
 ) {
 
-    this.collection(model.pathName).document(model.id).set(model).addOnCompleteListener {
-        onSuccess.invoke(it.isSuccessful)
-    }
+    this.collection(model.pathName).document(model.id)
+        .set(model).addOnCompleteListener {
+            onSuccess.invoke(it.isSuccessful)
+        }
         .addOnFailureListener {
             onFailure.invoke(it.message ?: "Unknown Error")
         }
@@ -35,3 +41,13 @@ suspend fun FirebaseFirestore.delete(
         onFailure.invoke(it.exception?.message ?: "")
     }
 }
+
+fun Any?.isNull() = this == null
+
+
+@RequiresApi(Build.VERSION_CODES.O)
+fun Timestamp.toLocalDate(): LocalDate? {
+    return this.toDate().toInstant()?.atZone(ZoneId.systemDefault())?.toLocalDate()
+}
+
+

@@ -10,6 +10,7 @@ import com.rom.garagely.R
 import com.rom.garagely.common.init
 import com.rom.garagely.databinding.FragmentProductModuleBinding
 import com.rom.garagely.ui.base.BaseFragment
+import com.rom.garagely.ui.productModule.Discount.DiscountListFragment
 import com.rom.garagely.ui.productModule.Product.ProductListFragment
 import com.rom.garagely.ui.productModule.category.BrandFragment
 
@@ -32,6 +33,9 @@ class ProductModuleFragment : BaseFragment<FragmentProductModuleBinding>() {
     }
     private val brandFragment by lazy {
         BrandFragment()
+    }
+    private val discountListFragment by lazy {
+        DiscountListFragment()
     }
 
     private val adapter = ProductMenuAdapter()
@@ -59,8 +63,8 @@ class ProductModuleFragment : BaseFragment<FragmentProductModuleBinding>() {
                 Menu.Tax -> {
                 }
 
-                else -> {
-
+                Menu.Discount -> {
+                    replaceFragment(discountListFragment)
                 }
             }
         }

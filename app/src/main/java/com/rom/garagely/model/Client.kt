@@ -1,11 +1,8 @@
 package com.rom.garagely.model
 
 import android.os.Parcelable
-import android.provider.ContactsContract.CommonDataKinds.Email
-import android.provider.ContactsContract.CommonDataKinds.SipAddress
 import com.rom.garagely.constant.Constant.CLIENT
 import kotlinx.android.parcel.Parcelize
-import java.io.Serializable
 import java.util.Date
 import java.util.UUID
 

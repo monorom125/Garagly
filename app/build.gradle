@@ -50,6 +50,9 @@ android {
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+
+    implementation 'org.jetbrains.kotlinx:kotlinx-datetime:0.3.0'  // Kotlin Date and Time library
+
     implementation 'androidx.core:core-ktx:1.10.1'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'androidx.appcompat:appcompat:1.6.1'
@@ -58,6 +61,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-storage-ktx:20.2.0'
     implementation 'com.google.firebase:firebase-auth-ktx:22.0.0'
     implementation 'com.google.firebase:firebase-storage:20.2.1'
+    implementation 'androidx.compose.material3:material3:1.0.0-alpha08'
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
@@ -77,6 +81,7 @@ dependencies {
     implementation "androidx.navigation:navigation-ui-ktx:$nav_version"
 
     implementation 'androidx.compose.material:material'
+    implementation "androidx.compose.material3:material3:1.1.1"
     implementation "androidx.compose.ui:ui:$compose_version"
     implementation 'androidx.compose.ui:ui-tooling-preview'
     debugImplementation 'androidx.compose.ui:ui-tooling'
@@ -99,6 +104,17 @@ dependencies {
     implementation 'com.github.bumptech.glide:glide:4.15.1'
 
     implementation 'de.hdodenhof:circleimageview:3.1.0'
+
+    implementation "com.maxkeppeler.sheets-compose-dialogs:core:1.0.2"
+    // CALENDAR
+    implementation "com.maxkeppeler.sheets-compose-dialogs:calendar:1.0.2"
+
+    // CLOCK
+    implementation "com.maxkeppeler.sheets-compose-dialogs:clock:1.0.2"
+
+    // DATE TIME
+//    implementation "com.maxkeppeler.sheets-compose-dialogs:date_time:1.0.2"
+
 
 
 

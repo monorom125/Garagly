@@ -7,6 +7,10 @@ object Constant {
     const val BRAND = "brand"
     const val DISCOUNT = "discount"
     const val CLIENT = "client"
+    const val SELL = "sell"
+    const val TAX = "tax"
+    const val ORDER = "order"
+    const val ORDERS = "orderList"
 
 
 }
