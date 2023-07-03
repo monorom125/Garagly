@@ -99,8 +99,8 @@ class ProductDetailDialogFragment : DialogFragment() {
         binding.tvTitle.text = car.name
         binding.tvCarDetail.text = car.info
         binding.tvQuantity.text = "Quantity : ${car.quantity}"
-        binding.tvBrand.text = "Brand : ${car.brand}"
-        binding.tvModel.text = "Model : ${car.model}"
+        binding.tvBrand.text = "Brand : ${car.brand?.name}"
+        binding.tvModel.text = "Model : ${car.vat?.name}"
 
         Glide.with(binding.root)
             .load(car.image)

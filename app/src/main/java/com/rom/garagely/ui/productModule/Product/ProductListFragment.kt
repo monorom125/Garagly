@@ -241,7 +241,7 @@ fun ProductItem(index: Int, car: Car, onItemClick: (Car) -> Unit) {
         Text(
             modifier = Modifier
                 .weight(1f),
-            text = car.brand ?: "_",
+            text = car.brand?.name ?: "_",
             style = Typography.body2,
         )
         Text(

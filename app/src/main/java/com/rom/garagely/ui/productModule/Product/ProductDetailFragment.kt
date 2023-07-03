@@ -10,7 +10,9 @@ import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -37,6 +39,7 @@ import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
@@ -59,10 +62,13 @@ import com.rom.garagely.MainActivity
 import com.rom.garagely.R
 import com.rom.garagely.common.PreferencesManager
 import com.rom.garagely.composeView.CoilImageLoader
+import com.rom.garagely.composeView.ItemDropdownMenu
+import com.rom.garagely.composeView.TaxDropdownMenu
 import com.rom.garagely.constant.IntentKey
 import com.rom.garagely.constant.SharedPreferenceKeys
 import com.rom.garagely.model.Car
 import com.rom.garagely.model.Key
+import com.rom.garagely.model.Tax
 import com.rom.garagely.theme.Typography
 import com.rom.garagely.ui.base.BaseComposeFragment
 import dagger.hilt.android.AndroidEntryPoint
@@ -107,17 +113,29 @@ class ProductDetailFragment : BaseComposeFragment() {
 
     @Composable
     fun ProductView() {
+
+        val interactionSource = remember {
+            MutableInteractionSource()
+        }
+
+        val isShowTaxs = remember {
+            mutableStateOf(false)
+        }
+
+        val isBrand = remember {
+            mutableStateOf(false)
+        }
         val carUi = viewModel.car.collectAsState()
 
         val nameState = remember {
             mutableStateOf(carUi.value?.name ?: "")
         }
         val brand = remember {
-            mutableStateOf(carUi.value?.brand ?: "")
+            mutableStateOf(carUi.value?.brand)
         }
 
         val model = remember {
-            mutableStateOf(carUi.value?.model ?: "")
+            mutableStateOf(carUi.value?.vat)
         }
 
         val productInf = remember {
@@ -252,54 +270,101 @@ class ProductDetailFragment : BaseComposeFragment() {
                             .fillMaxWidth(0.7f),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        OutlinedTextField(
-                            value = brand.value,
-                            onValueChange = {
-                                brand.value = it
-                            },
+                        Box(
                             modifier = Modifier
                                 .weight(1f)
                                 .padding(
                                     horizontal = 24.dp,
                                 )
                                 .padding(end = 16.dp),
-                            label = {
-                                Text(
-                                    "Brand",
-                                    style = Typography.body2.copy(color = AppColor.HintText)
+                        ) {
+                            OutlinedTextField(
+                                value = brand.value?.name ?: "",
+                                onValueChange = {
+                                },
+                                label = {
+                                    Text(
+                                        "Brand",
+                                        style = Typography.body2.copy(color = AppColor.HintText)
+                                    )
+                                },
+                                readOnly = true,
+                                shape = RoundedCornerShape(10.dp),
+                                colors = TextFieldDefaults.textFieldColors(
+                                    backgroundColor = Color.Transparent,
+                                    focusedIndicatorColor = AppColor.HintText,
+                                    unfocusedLabelColor = AppColor.HintText,
                                 )
-                            },
-                            shape = RoundedCornerShape(10.dp),
-                            colors = TextFieldDefaults.textFieldColors(
-                                backgroundColor = Color.Transparent,
-                                focusedIndicatorColor = AppColor.HintText,
-                                unfocusedLabelColor = AppColor.HintText,
                             )
-                        )
-                        OutlinedTextField(
-                            value = model.value,
-                            onValueChange = {
-                                model.value = it
-                            },
+
+                            Box(modifier = Modifier
+                                .matchParentSize()
+                                .clickable(
+                                    interactionSource = interactionSource,
+                                    indication = null
+                                ) {
+                                    isBrand.value = !isBrand.value
+                                })
+                            ItemDropdownMenu(
+                                items = viewModel.category,
+                                expand = isBrand.value,
+                                onDismiss = { isBrand.value = false },
+                                modifier = Modifier.wrapContentHeight(),
+                                onItemClick = {
+                                    brand.value = it
+                                    isBrand.value = false
+                                }
+                            )
+                        }
+
+                        Box(
                             modifier = Modifier
                                 .weight(1f)
                                 .padding(
                                     end = 24.dp,
                                 ),
-                            label = {
-                                Text(
-                                    "Model",
-                                    style = Typography.body2.copy(color = AppColor.HintText)
+                        ) {
+                            OutlinedTextField(
+                                value = model.value?.name ?: "",
+                                onValueChange = {
+                                },
+                                readOnly = true,
+                                label = {
+                                    Text(
+                                        "Vat",
+                                        style = Typography.body2.copy(color = AppColor.HintText)
+                                    )
+                                },
+                                shape = RoundedCornerShape(10.dp),
+                                colors = TextFieldDefaults.textFieldColors(
+                                    backgroundColor = Color.Transparent,
+                                    focusedIndicatorColor = AppColor.HintText,
+                                    unfocusedLabelColor = AppColor.HintText,
                                 )
-                            },
-                            shape = RoundedCornerShape(10.dp),
-                            colors = TextFieldDefaults.textFieldColors(
-                                backgroundColor = Color.Transparent,
-                                focusedIndicatorColor = AppColor.HintText,
-                                unfocusedLabelColor = AppColor.HintText,
                             )
-                        )
+                            Box(modifier = Modifier
+                                .matchParentSize()
+                                .clickable(
+                                    interactionSource = interactionSource,
+                                    indication = null
+                                ) {
+                                    isShowTaxs.value = !isShowTaxs.value
+                                }){
+                                TaxDropdownMenu(
+                                    items = viewModel.vats,
+                                    expand = isShowTaxs.value,
+                                    onDismiss = { isShowTaxs.value = false },
+                                    modifier = Modifier.wrapContentHeight(),
+                                    onItemClick = {
+                                        model.value = it
+                                        isShowTaxs.value = false
+                                    }
+                                )
+                            }
+                        }
+
                     }
+
                     OutlinedTextField(
                         value = productInf.value,
                         onValueChange = {
@@ -313,7 +378,7 @@ class ProductDetailFragment : BaseComposeFragment() {
                             ),
                         label = {
                             Text(
-                                "Detail Car",
+                                "Detail Product",
                                 style = Typography.body2.copy(color = AppColor.HintText)
                             )
                         },
@@ -324,85 +389,6 @@ class ProductDetailFragment : BaseComposeFragment() {
                             unfocusedLabelColor = AppColor.HintText,
                         )
                     )
-
-                    Column(
-                        modifier = Modifier
-                            .fillMaxWidth(0.7f)
-                            .padding(top = 24.dp)
-                    ) {
-                        Row {
-                            Row(
-                                modifier = Modifier
-                                    .weight(1f),
-                                verticalAlignment = Alignment.CenterVertically
-                            ) {
-                                Text(
-                                    text = "Sell",
-                                    style = Typography.h2
-                                )
-                                Checkbox(
-                                    modifier = Modifier.wrapContentSize(),
-                                    checked = true,
-                                    onCheckedChange = {
-                                    },
-                                    colors = CheckboxDefaults.colors(AppColor.Red)
-                                )
-                            }
-                            Row(
-                                modifier = Modifier
-                                    .weight(1f)
-                                    .padding(top = 24.dp),
-                                verticalAlignment = Alignment.CenterVertically
-                            ) {
-                                Text(
-                                    text = "Rent",
-                                    style = Typography.h2
-                                )
-                                Checkbox(
-                                    modifier = Modifier.wrapContentSize(),
-                                    checked = true,
-                                    onCheckedChange = {
-                                    },
-                                    colors = CheckboxDefaults.colors(AppColor.Red)
-                                )
-                            }
-                        }
-
-                        Text(
-                            text = "Quantity",
-                            style = Typography.h2,
-                            modifier = Modifier.padding(top = 24.dp)
-                        )
-                        Row(
-                            modifier = Modifier.padding(24.dp),
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            Image(
-                                painter = painterResource(id = R.drawable.ic_minus),
-                                contentDescription = null,
-                                modifier = Modifier.clickable {
-                                    if (quantityUi.value > 0) {
-                                        quantityUi.value--
-                                    } else {
-                                        return@clickable
-                                    }
-                                }
-                            )
-                            Text(
-                                modifier = Modifier.padding(16.dp),
-                                text = quantityUi.value.toString(),
-                                style = Typography.h2
-                            )
-                            Image(
-                                painter = painterResource(id = R.drawable.plus_fill),
-                                contentDescription = null,
-                                Modifier.clickable {
-                                    quantityUi.value++
-                                }
-                            )
-                        }
-                    }
-
                     Text(
                         "Key",
                         style = Typography.h2.copy(
@@ -458,9 +444,10 @@ class ProductDetailFragment : BaseComposeFragment() {
                                 val newCar = Car().apply {
                                     id = UUID.randomUUID().toString()
                                     name = nameState.value
-                                    account_id = PreferencesManager.instance.get(SharedPreferenceKeys.USER_ID)
+                                    account_id =
+                                        PreferencesManager.instance.get(SharedPreferenceKeys.USER_ID)
                                     this.info = productInf.value
-                                    this.model = model.value
+                                    this.vat = model.value
                                     this.price = priceUi.value
                                     this.quantity = quantityUi.value
                                     this.keys = keys.filter { it.name.isNotEmpty() }.toMutableList()
@@ -472,7 +459,7 @@ class ProductDetailFragment : BaseComposeFragment() {
                                     this.name = nameState.value
                                     this.brand = brand.value
                                     this.info = productInf.value
-                                    this.model = model.value
+                                    this.vat = model.value
                                     this.price = priceUi.value
                                     this.quantity = quantityUi.value
                                     this.keys = keys.filter { it.name.isNotEmpty() }.toMutableList()
@@ -558,6 +545,7 @@ class ProductDetailFragment : BaseComposeFragment() {
                     unfocusedLabelColor = AppColor.HintText,
                 )
             )
+
             OutlinedTextField(
                 value = price.value.toString(),
                 onValueChange = {

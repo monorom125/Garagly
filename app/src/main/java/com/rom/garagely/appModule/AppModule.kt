@@ -4,6 +4,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import com.rom.garagely.common.PreferencesManager
+import com.rom.garagely.constant.SharedPreferenceKeys
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -30,5 +31,9 @@ object AppModule {
     @Provides
     @Singleton
     fun provideFireBaseStorage(): FirebaseStorage = FirebaseStorage.getInstance()
+
+    @Provides
+    @Singleton
+    fun provideAccountId() : String = providePreferencesManager().get(SharedPreferenceKeys.USER_ID)?:""
 
 }

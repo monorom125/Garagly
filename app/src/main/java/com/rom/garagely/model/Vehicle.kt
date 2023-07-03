@@ -12,8 +12,9 @@ data class Car(
     override var id: String,
     var name: String? = null,
     var price: Double = 0.0,
-    var brand: String? = null,
-    var model: String? = null,
+    var brand: Brand? = null,
+    var vat: Tax? = null,
+    var discount: Discount? = null,
     var info: String? = null,
     var status: Status = Status.Sell,
     var keys: MutableList<Key> = mutableListOf(),
@@ -22,7 +23,7 @@ data class Car(
     var account_id: String? = null
 ) : Parcelable, BaseModel() {
 
-    constructor() : this(id = UUID.randomUUID().toString(), name = "", brand = null, model = null)
+    constructor() : this(id = UUID.randomUUID().toString(), name = "", brand = null, vat = null)
 
     enum class Status {
         Sell,

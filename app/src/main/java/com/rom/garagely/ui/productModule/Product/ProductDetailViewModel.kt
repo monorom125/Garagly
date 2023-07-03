@@ -6,7 +6,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
+import com.rom.garagely.constant.Constant.BRAND
+import com.rom.garagely.constant.Constant.TAX
+import com.rom.garagely.model.Brand
 import com.rom.garagely.model.Car
+import com.rom.garagely.model.Tax
 import com.rom.garagely.util.uploadImage
 import com.rom.garagely.util.upsert
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -19,7 +23,8 @@ import javax.inject.Inject
 @HiltViewModel
 class ProductDetailViewModel @Inject constructor(
     private val firestore: FirebaseFirestore,
-    private val storage: FirebaseStorage
+    private val storage: FirebaseStorage,
+    private val accountId: String
 ) : ViewModel() {
 
     private val _car = MutableStateFlow<Car?>(null)
@@ -27,6 +32,16 @@ class ProductDetailViewModel @Inject constructor(
 
     private val _createProductStat = MutableStateFlow(false)
     val result = _createProductStat.asStateFlow()
+
+
+    init {
+
+        getCategory()
+        getAllVat()
+    }
+
+    var category = listOf<Brand>()
+    var vats = listOf<Tax>()
 
     fun createProduct(car: Car, image: Uri?) {
         viewModelScope.launch(Dispatchers.IO) {
@@ -39,6 +54,32 @@ class ProductDetailViewModel @Inject constructor(
             }) {
 
             }
+        }
+    }
+
+    private fun getCategory() {
+        viewModelScope.launch {
+            firestore.collection(BRAND)
+                .whereEqualTo("account_id", accountId)
+                .get()
+                .addOnCompleteListener {
+                    if (it.isSuccessful) {
+                        category = it.result.toObjects(Brand::class.java)
+                    }
+                }
+        }
+    }
+
+    private fun getAllVat() {
+        viewModelScope.launch {
+            firestore.collection(TAX)
+                .whereEqualTo("account_id", accountId)
+                .get()
+                .addOnCompleteListener {
+                    if (it.isSuccessful) {
+                        vats = it.result.toObjects(Tax::class.java)
+                    }
+                }
         }
     }
 
