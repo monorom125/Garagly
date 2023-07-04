@@ -15,11 +15,13 @@ import com.rom.garagely.constant.enitity.ClientEntity
 import com.rom.garagely.model.Client
 import com.rom.garagely.model.Order
 import com.rom.garagely.model.Sell
+import com.rom.garagely.util.delete
 import com.rom.garagely.util.isNull
-import com.rom.garagely.util.upsertOrder
+import com.rom.garagely.util.upsert
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
 
 @HiltViewModel
@@ -31,17 +33,18 @@ class SpaceDashBoardViewModel @Inject constructor(
     var clients = listOf<Client>()
 
     private var _client = MutableLiveData<List<Client>>()
-    val clientsLiveData : LiveData<List<Client>> get() = _client
+    val clientsLiveData: LiveData<List<Client>> get() = _client
     private var _sell = MutableLiveData<Sell?>()
 
     var orders = MutableLiveData<List<Order>>()
 
-    val sellLiveData :LiveData<Sell?> get() = _sell
-    var sell : Sell? = null
-        set(value){
+    val sellLiveData: LiveData<Sell?> get() = _sell
+
+    var sell: Sell? = null
+        set(value) {
             field = value
             _sell.postValue(field)
-            getOrders()
+            getOrders(field)
         }
 
     init {
@@ -50,55 +53,67 @@ class SpaceDashBoardViewModel @Inject constructor(
     }
 
 
-    private fun getOrders(){
-        if(sell.isNull()){
+    private fun getOrders(sell: Sell?) {
+        if (sell.isNull()) {
             orders.value = listOf()
             return
         }
         viewModelScope.launch {
-            dp.collection(ORDER).
-            whereEqualTo("sell_id",sell!!.id)
+            dp.collection(ORDER).whereEqualTo("sell_id", sell!!.id)
                 .get().addOnCompleteListener {
-                    if(it.isSuccessful){
+                    if (it.isSuccessful) {
                         orders.value = it.result.toObjects(Order::class.java)
                     }
                 }
         }
     }
 
-    private fun getSell(){
+    private fun getSell() {
         viewModelScope.launch {
             dp.collection(SELL).whereNotEqualTo("status", Sell.Status.Done.name)
                 .get()
                 .addOnCompleteListener {
-                    if(it.isSuccessful){
-                        sell= it.result.toObjects(Sell::class.java).firstOrNull()
-                        getOrders()
+                    if (it.isSuccessful) {
+                        sell = it.result.toObjects(Sell::class.java).firstOrNull()
+                        getOrders(sell)
+                        _sell.postValue(sell)
                     }
                 }
         }
 
     }
-    fun createSell(sell: Sell){
+
+    fun createSell(sell: Sell, onComplete: ((Sell) -> Unit)? = null) {
         viewModelScope.launch {
-            dp.upsertOrder(sell, onSuccess = {
-                getSell()
-            }){
+            dp.upsert(sell, onSuccess = {
+                this@SpaceDashBoardViewModel.sell = sell
+                onComplete?.invoke(sell)
+            }) {
             }
         }
     }
 
-
-    fun upsertOrder(order: Order, completion: ((Order) -> Unit)? = null){
+    fun upsertOrder(order: Order, completion: ((Order) -> Unit)? = null) {
         viewModelScope.launch {
-            dp.upsertOrder(order, onSuccess = {
-                completion?.invoke(order)
+            dp.upsert(order, onSuccess = {
+                getOrders(sell!!)
+            }) {
+
+            }
+        }
+    }
+
+    fun deletedOrder(order: Order){
+        viewModelScope.launch {
+            dp.delete(order, onSuccess = {
+                getOrders(sell)
             }){
 
             }
         }
     }
-     fun getClient(isPost: Boolean = false) {
+
+    fun getClient(isPost: Boolean = false) {
         viewModelScope.launch(Dispatchers.Default) {
             dp.collection(CLIENT)
                 .whereEqualTo(
@@ -109,7 +124,7 @@ class SpaceDashBoardViewModel @Inject constructor(
                 .addOnCompleteListener {
                     if (it.isSuccessful) {
                         clients = it.result.toObjects(Client::class.java)
-                        if(isPost){
+                        if (isPost) {
                             _client.postValue(clients)
                         }
                     }

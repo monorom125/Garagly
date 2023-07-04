@@ -5,7 +5,9 @@ import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import com.rom.garagely.R
+import com.rom.garagely.common.PreferencesManager
 import com.rom.garagely.common.init
+import com.rom.garagely.constant.SharedPreferenceKeys
 import com.rom.garagely.databinding.FragmentSpaceDashBoardBinding
 import com.rom.garagely.model.Client
 import com.rom.garagely.model.Order
@@ -13,7 +15,10 @@ import com.rom.garagely.model.Sell
 import com.rom.garagely.ui.Dailog.SearchGuestPopWindow
 import com.rom.garagely.ui.client.CreateClientActivity
 import com.rom.garagely.ui.base.BaseFragment
+import com.rom.garagely.util.formatToHour
+import com.rom.garagely.util.isNull
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.runBlocking
 
 @AndroidEntryPoint
 class SpaceDashBoardFragment : BaseFragment<FragmentSpaceDashBoardBinding>() {
@@ -31,8 +36,23 @@ class SpaceDashBoardFragment : BaseFragment<FragmentSpaceDashBoardBinding>() {
     }
 
     fun setOrder(order: Order) {
-        viewModel.upsertOrder(order) {
-            orderListAdapter.add(it)
+        if (viewModel.sell.isNull()) {
+            val sell = Sell(account_id = PreferencesManager.instance.get(SharedPreferenceKeys.USER_ID))
+            order.sell_id = sell.id
+
+            viewModel.createSell(sell) {
+                viewModel.upsertOrder(order)
+            }
+        } else {
+            val isSameOrder = orderListAdapter.items.firstOrNull { it.isTheSame(order) }
+            if (!isSameOrder.isNull()) {
+                order.qty = isSameOrder!!.qty + 1
+                order.id = isSameOrder.id
+                order.sell_id = isSameOrder.sell_id
+            } else {
+                order.sell_id = viewModel.sell!!.id
+            }
+            viewModel.upsertOrder(order)
         }
     }
 
@@ -43,16 +63,16 @@ class SpaceDashBoardFragment : BaseFragment<FragmentSpaceDashBoardBinding>() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        observableOrders()
-        observableClinet()
         binding.rvOrderList.init(orderListAdapter)
-        binding.tvNewClient.setOnClickListener {
-            createClient.launch("")
-        }
-
         binding.tvNewClient.setOnClickListener {
             viewModel.getClient(true)
         }
+        orderListAdapter.setDelegate { item, _ ->
+         viewModel.deletedOrder(item)
+        }
+        observableOrders()
+        observableClinet()
+        observableSell()
     }
 
     private fun observableClinet() {
@@ -60,10 +80,15 @@ class SpaceDashBoardFragment : BaseFragment<FragmentSpaceDashBoardBinding>() {
             guestPopupWindow = SearchGuestPopWindow(requireContext(), binding.root.width, 400)
             guestPopupWindow?.delegate = object : SearchGuestPopWindow.Delegate {
                 override fun onContactSelected(customer: Client) {
+                    if (viewModel.sell.isNull()) {
+                        return
+                    }
+                    viewModel.sell?.client = customer
+                    viewModel.createSell(viewModel.sell!!)
                 }
 
                 override fun onAddGuest() {
-
+                    createClient.launch("")
                 }
             }
             guestPopupWindow!!.setData(viewModel.clients)
@@ -83,12 +108,17 @@ class SpaceDashBoardFragment : BaseFragment<FragmentSpaceDashBoardBinding>() {
     }
 
     private fun observableSell() {
-        viewModel.clientsLiveData.observe(viewLifecycleOwner) {
+        viewModel.sellLiveData.observe(viewLifecycleOwner) {
+            if (it.isNull()) {
+                binding.tvSell.text = "no order"
+            }
+            binding.tvSell.text = it?.date.formatToHour()
 
         }
     }
 
     interface Delegate {
         fun onGetSell(sell: Sell?)
+        fun onCloseMeal()
     }
 }

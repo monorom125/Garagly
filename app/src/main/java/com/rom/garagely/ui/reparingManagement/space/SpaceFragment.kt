@@ -26,21 +26,23 @@ class SpaceFragment : BaseFragment<FragmentSpaceBinding>() {
     override val layoutResource: Int
         get() = R.layout.fragment_space
 
-    var delegate : Delegate? = null
-    private var sell : Sell? = null
+    var delegate: Delegate? = null
+    private var sell: Sell? = null
 
     private val viewModel: SpaceViewModel by viewModels()
     private val spaceRecyclerViewAdapter = SpaceRecycleViewAdapter()
     private val saleRecycleViewAdapter: CarSaleRecycleViewAdapter by lazy {
         CarSaleRecycleViewAdapter().apply {
             setDelegate { item, _ ->
-                if(item.keys.isEmpty()){
-                    if(sell.isNull()){
-                         sell = Sell(account_id = PreferencesManager.instance.get(SharedPreferenceKeys.USER_ID))
-                        delegate?.onCreateMeal(sell!!)
-                        val order = Order(account_id = PreferencesManager.instance.get(SharedPreferenceKeys.USER_ID), product = item, qty = 1, sell_id = sell!!.id)
-                        delegate?.setOrder(order = order)
-                    }
+                if (item.keys.isEmpty()) {
+                    val order = Order(
+                        account_id = PreferencesManager.instance.get(SharedPreferenceKeys.USER_ID),
+                        product = item,
+                        qty = 1,
+                        sell_id = ""
+                    )
+                    delegate?.setOrder(order = order)
+
                     return@setDelegate
                 }
                 showProductDialog(item)
@@ -55,10 +57,11 @@ class SpaceFragment : BaseFragment<FragmentSpaceBinding>() {
         setUpView()
     }
 
-    private fun showProductDialog(car: Car){
+    private fun showProductDialog(car: Car) {
         val dialogFragment = ProductDetailDialogFragment.newInstance(car)
-        dialogFragment.show(childFragmentManager,null)
+        dialogFragment.show(childFragmentManager, null)
     }
+
     private fun setUpView() {
         binding.spaceRecycleView.init(
             spaceRecyclerViewAdapter,
@@ -84,7 +87,7 @@ class SpaceFragment : BaseFragment<FragmentSpaceBinding>() {
         }
     }
 
-    interface Delegate{
+    interface Delegate {
         fun onCreateMeal(sell: Sell)
         fun setOrder(order: Order)
     }

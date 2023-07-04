@@ -11,7 +11,7 @@ import com.rom.garagely.model.Brand
 import com.rom.garagely.model.Car
 import com.rom.garagely.model.Tax
 import com.rom.garagely.util.uploadImage
-import com.rom.garagely.util.upsertOrder
+import com.rom.garagely.util.upsert
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -47,7 +47,7 @@ class ProductDetailViewModel @Inject constructor(
             image?.let {
                 car.image = storage.uploadImage("products/image/${car.id}", image)
             }
-            firestore.upsertOrder(car, onSuccess = {
+            firestore.upsert(car, onSuccess = {
                 _createProductStat.value = it
 
             }) {

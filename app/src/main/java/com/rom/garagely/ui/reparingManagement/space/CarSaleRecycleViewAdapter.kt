@@ -45,7 +45,7 @@ class CarSaleRecycleViewAdapter :
         fun onBind(car: Car) {
             Glide.with(binding.root)
                 .load(car.image)
-                .placeholder(R.drawable.ic_car_holder)
+                .placeholder(R.drawable.ic_product_holder)
                 .fitCenter()
                 .into(binding.imageCar)
             binding.tvCarName.text = car.name

@@ -11,7 +11,7 @@ import kotlinx.coroutines.tasks.await
 import java.time.LocalDate
 import java.time.ZoneId
 
-suspend fun FirebaseFirestore.upsertOrder(
+suspend fun FirebaseFirestore.upsert(
     model: BaseModel,
     onSuccess: (Boolean) -> Unit,
     onFailure: (String) -> Unit

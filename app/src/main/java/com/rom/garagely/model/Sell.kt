@@ -11,7 +11,7 @@ data class Sell(
     override var id: String = UUID.randomUUID().toString(),
     var account_id: String? = null,
     var date: Date = Date(),
-    val client: Client? = null,
+    var client: Client? = null,
     var status: Status = Status.UnPaid
 ) : Parcelable, BaseModel() {
 

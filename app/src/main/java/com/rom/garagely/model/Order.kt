@@ -21,6 +21,14 @@ data class Order(
         get() = Constant.ORDER
 
 
+
+    fun isTheSame(order: Order) : Boolean{
+        return this.account_id == order.account_id &&  this.product?.id == order.product?.id && this.status == order.status
+    }
+
+    fun isEdible() : Boolean{
+        return this.status == Status.Order
+    }
     enum class Status {
         Order, Paid
     }

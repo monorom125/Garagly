@@ -17,6 +17,12 @@ fun Date?.formatToString(): String {
     return simpleDateFormat.format(this)
 }
 
+fun Date?.formatToHour(): String{
+    if (this == null) return ""
+    val simpleDateFormat = SimpleDateFormat("hh:mm a", Locale.getDefault())
+    simpleDateFormat.timeZone = TimeZone.getDefault()
+    return simpleDateFormat.format(this)
+}
 @RequiresApi(Build.VERSION_CODES.O)
 fun LocalDate?.toDate(): Date? {
     if(this.isNull()) return null

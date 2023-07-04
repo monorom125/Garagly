@@ -9,7 +9,7 @@ import com.google.firebase.storage.FirebaseStorage
 import com.rom.garagely.model.Brand
 import com.rom.garagely.util.delete
 import com.rom.garagely.util.uploadImage
-import com.rom.garagely.util.upsertOrder
+import com.rom.garagely.util.upsert
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -41,7 +41,7 @@ class BrandDetailViewModel@Inject constructor(
                     brand.image = null
                 }
             }
-            firebaseFirestore.upsertOrder(brand, onSuccess = {
+            firebaseFirestore.upsert(brand, onSuccess = {
                 _brand.value = brand
                 _createBrand.value = !_createBrand.value
 

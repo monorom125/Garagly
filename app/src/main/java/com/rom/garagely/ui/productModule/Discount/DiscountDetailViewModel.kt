@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.firestore.FirebaseFirestore
 import com.rom.garagely.model.Discount
-import com.rom.garagely.util.upsertOrder
+import com.rom.garagely.util.upsert
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -25,7 +25,7 @@ class DiscountDetailViewModel @Inject constructor(
 
     fun upsertDiscount(discount: Discount){
         viewModelScope.launch(Dispatchers.Default) {
-            firestore.upsertOrder(discount, onSuccess = {
+            firestore.upsert(discount, onSuccess = {
                 onSuccess.value = !onSuccess.value
 
             }){

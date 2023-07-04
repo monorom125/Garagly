@@ -11,8 +11,6 @@ import com.rom.garagely.ui.base.BaseRecyclerViewAdapter
 class OrderListAdapter : BaseRecyclerViewAdapter<Order, OrderListAdapter.OrderViewHolder>() {
 
 
-
-
     override fun onCreateItemHolder(
         inflater: LayoutInflater,
         parent: ViewGroup,
@@ -24,6 +22,7 @@ class OrderListAdapter : BaseRecyclerViewAdapter<Order, OrderListAdapter.OrderVi
     override fun onBindItemHolder(holder: OrderViewHolder, position: Int, context: Context) {
         holder.onBind(items[position])
     }
+
     inner class OrderViewHolder(binding: ItemOrdersBinding) :
         BaseViewHolder<ItemOrdersBinding>(binding) {
 
@@ -32,6 +31,10 @@ class OrderListAdapter : BaseRecyclerViewAdapter<Order, OrderListAdapter.OrderVi
             binding.textViewQuantity.text = order.qty.toString()
             binding.textViewPrice.text = order.product?.price.toString()
             binding.textViewTotal.text = (((order.qty * order.product?.price!!))).toString()
+            binding.root.isClickable = order.isEdible()
+            binding.buttonRemove.setOnClickListener {
+                action?.invoke(order, bindingAdapterPosition)
+            }
         }
     }
 }
