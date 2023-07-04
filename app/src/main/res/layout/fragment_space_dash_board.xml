@@ -74,7 +74,7 @@
                 android:layout_weight="4"
                 android:paddingVertical="8dp"
                 android:paddingStart="24dp"
-                android:text="Car" />
+                android:text="Product" />
 
             <TextView
                 style="@style/TextViewStyle"
@@ -113,6 +113,13 @@
             android:background="@color/line_divider_view"
             app:layout_constraintTop_toBottomOf="@id/layout_order_header" />
 
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_orderList"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toTopOf="@id/buttonDiscount"
+            app:layout_constraintTop_toBottomOf="@id/view_line_divider" />
+
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/buttonDiscount"
             style="@style/ButtonStyle"
@@ -120,8 +127,8 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/dimen_16"
             android:background="@drawable/background_color_blue_round_8dp"
-            android:drawableTop="@drawable/ic_discount_24dp"
             android:backgroundTint="@color/color_red"
+            android:drawableTop="@drawable/ic_discount_24dp"
             android:drawableTint="@color/colorTextWhite"
             android:paddingHorizontal="@dimen/dimen_16"
             android:paddingVertical="5dp"
@@ -158,7 +165,6 @@
             app:layout_constraintWidth_min="80dp" />
 
 
-
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/buttonPay"
             style="@style/ButtonStyle.Bold"
@@ -178,7 +184,6 @@
             app:layout_constraintHorizontal_weight="0.35"
             app:layout_constraintStart_toEndOf="@id/buttonClear"
             app:layout_constraintTop_toTopOf="@id/buttonDiscount" />
-
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

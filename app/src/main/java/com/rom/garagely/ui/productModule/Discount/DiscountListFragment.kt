@@ -80,7 +80,7 @@ class DiscountListFragment : BaseComposeFragment() {
 
         Surface(
             modifier = Modifier.fillMaxSize(),
-            color = AppColor.Background
+            color = AppColor.White
         ) {
             Column(Modifier.fillMaxSize()) {
                 Row(
@@ -171,7 +171,7 @@ class DiscountListFragment : BaseComposeFragment() {
                 Divider(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(horizontal = 8.dp)
+                        .padding(horizontal = 16.dp)
                         .height(1.dp)
                         .background(AppColor.Line)
                 )

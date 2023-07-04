@@ -36,7 +36,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -49,7 +48,6 @@ import com.rom.garagely.R
 import com.rom.garagely.model.Car
 import com.rom.garagely.theme.Typography
 import com.rom.garagely.ui.base.BaseComposeFragment
-import com.rom.garagely.ui.productModule.ProductModuleFragment
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -148,7 +146,7 @@ class ProductListFragment : BaseComposeFragment() {
                     Button(
                         onClick = { goToProductDetail(null) },
                         shape = RoundedCornerShape(8.dp),
-                        colors = ButtonDefaults.buttonColors(backgroundColor = AppColor.Red),
+                        colors = ButtonDefaults.buttonColors(backgroundColor = AppColor.LightOrange),
                         modifier = Modifier
                             .padding(vertical = 16.dp)
                             .padding(end = 16.dp)
@@ -167,7 +165,7 @@ class ProductListFragment : BaseComposeFragment() {
                 Row(
                     Modifier
                         .fillMaxWidth()
-                        .padding(horizontal = 8.dp)
+                        .padding(horizontal = 16.dp)
                         .height(IntrinsicSize.Min)
                         .wrapContentWidth()
 
@@ -176,14 +174,21 @@ class ProductListFragment : BaseComposeFragment() {
                         this.FilterHeaderItem(header = header)
                     }
                 }
-                Divider(modifier = Modifier.fillMaxWidth()
-                    .padding(horizontal = 8.dp)
-                    .height(1.dp)
-                    .background(AppColor.Line))
+                Divider(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp)
+                        .height(1.dp)
+                        .background(AppColor.Line)
+                )
 
-                LazyColumn {
+                LazyColumn(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp)
+                ) {
                     items(products.size) {
-                        ProductItem(index = it, car = products[it]) { car ->
+                        ProductItem(index = it, product = products[it]) { car ->
                             goToProductDetail(car)
                         }
                     }
@@ -207,7 +212,7 @@ fun RowScope.FilterHeaderItem(header: Header) {
         Text(
             modifier = Modifier.wrapContentSize(),
             text = stringResource(id = header.name),
-            style = Typography.h3,
+            style = Typography.h3
         )
         Image(
             modifier = Modifier.padding(start = 4.dp),
@@ -218,12 +223,12 @@ fun RowScope.FilterHeaderItem(header: Header) {
 }
 
 @Composable
-fun ProductItem(index: Int, car: Car, onItemClick: (Car) -> Unit) {
+fun ProductItem(index: Int, product: Car, onItemClick: (Car) -> Unit) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .clickable {
-                onItemClick.invoke(car)
+                onItemClick.invoke(product)
             }
             .background(color = AppColor.SearchBackground.takeIf { index % 2 == 0 }
                 ?: AppColor.Background),
@@ -233,23 +238,15 @@ fun ProductItem(index: Int, car: Car, onItemClick: (Car) -> Unit) {
         Text(
             modifier = Modifier
                 .wrapContentHeight()
-                .padding(vertical = 8.dp)
+                .padding(vertical = 10.dp)
                 .weight(1f),
-            text = car.name ?: "",
+            text = product.name ?: "",
             style = Typography.body2,
         )
         Text(
             modifier = Modifier
                 .weight(1f),
-            text = car.brand?.name ?: "_",
-            style = Typography.body2,
-        )
-        Text(
-            modifier = Modifier
-                .wrapContentHeight()
-                .padding(vertical = 8.dp)
-                .weight(1f),
-            text = car.price.toString(),
+            text = product.brand?.name ?: "_",
             style = Typography.body2,
         )
         Text(
@@ -257,7 +254,16 @@ fun ProductItem(index: Int, car: Car, onItemClick: (Car) -> Unit) {
                 .wrapContentHeight()
                 .padding(vertical = 8.dp)
                 .weight(1f),
-            text = car.quantity.toString(),
+            text = "$" + product.price.toString(),
+            style = Typography.body2,
+        )
+
+        Text(
+            modifier = Modifier
+                .wrapContentHeight()
+                .padding(vertical = 8.dp)
+                .weight(1f),
+            text = product.quantity.toString(),
             style = Typography.body2,
         )
     }

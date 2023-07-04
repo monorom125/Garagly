@@ -11,6 +11,4 @@ object Constant {
     const val TAX = "tax"
     const val ORDER = "order"
     const val ORDERS = "orderList"
-
-
 }

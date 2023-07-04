@@ -1,13 +1,10 @@
 package com.rom.garagely.ui.productModule.tax
 
-import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.firestore.FirebaseFirestore
-import com.rom.garagely.model.Car
 import com.rom.garagely.model.Tax
-import com.rom.garagely.util.uploadImage
-import com.rom.garagely.util.upsert
+import com.rom.garagely.util.upsertOrder
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -28,7 +25,7 @@ class TaxDetailViewModel @Inject constructor(
 
     fun createProduct(tax: Tax) {
         viewModelScope.launch(Dispatchers.Default) {
-            db.upsert(tax, onSuccess = {
+            db.upsertOrder(tax, onSuccess = {
                 _createProductStat.value = it
             }) {
 

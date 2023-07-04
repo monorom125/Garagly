@@ -10,15 +10,15 @@ import java.util.UUID
 data class Sell(
     override var id: String = UUID.randomUUID().toString(),
     var account_id: String? = null,
-    var client_id: String? = null,
     var date: Date = Date(),
-    val orderCart_id: String? = null,
-    val total_discount_amount: Double? = null,
-    val tax : Tax? = null,
-    var totalTax_amount : Double? = null,
-    val total_amount : Double? = null,
+    val client: Client? = null,
+    var status: Status = Status.UnPaid
 ) : Parcelable, BaseModel() {
 
     override val pathName: String
         get() = SELL
+
+    enum class Status {
+        UnPaid, Paid, Done
+    }
 }

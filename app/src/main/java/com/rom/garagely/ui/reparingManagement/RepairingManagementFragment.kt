@@ -4,8 +4,11 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.add
 import androidx.fragment.app.commit
+import com.rom.garagely.MainActivity
 import com.rom.garagely.R
 import com.rom.garagely.databinding.FragmentReparingManagmentBinding
+import com.rom.garagely.model.Order
+import com.rom.garagely.model.Sell
 import com.rom.garagely.ui.base.BaseFragment
 import com.rom.garagely.ui.reparingManagement.dashboard.SpaceDashBoardFragment
 import com.rom.garagely.ui.reparingManagement.space.SpaceFragment
@@ -28,17 +31,35 @@ class RepairingManagementFragment : BaseFragment<FragmentReparingManagmentBindin
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setupDashBoardFragment()
+        (activity as MainActivity).setTitle("Product Management")
         setUpSpaceFragment()
+        setupDashBoardFragment()
     }
 
     private fun setupDashBoardFragment() {
-        val spaceManagerFragment = SpaceDashBoardFragment()
+        val spaceManagerFragment = SpaceDashBoardFragment().apply {
+
+        }
         mainSpaceManagerFragment.addToDashboardFragmentStack(spaceManagerFragment, false)
     }
 
     private fun setUpSpaceFragment() {
-        val spaceFragment = SpaceFragment()
+        val spaceFragment = SpaceFragment().apply {
+            delegate = object : SpaceFragment.Delegate {
+                override fun onCreateMeal(sell: Sell) {
+                    (mainSpaceManagerFragment.currentDashboardFragment as SpaceDashBoardFragment).create(
+                        sell
+                    )
+                }
+
+                override fun setOrder(order: Order) {
+                    (mainSpaceManagerFragment.currentDashboardFragment as SpaceDashBoardFragment).setOrder(
+                        order
+                    )
+                }
+
+            }
+        }
         mainSpaceManagerFragment.addToSpaceFragment(spaceFragment, false)
     }
 }

@@ -42,7 +42,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
         super.onCreate(savedInstanceState)
         this.user = intent.parcelable("USER", User::class.java)!!
         binding.posHeaderToolbar.setGaragelyName(this.user?.name ?: "")
-        setTitle("Repairing Management")
+        setTitle("Retail Management")
         pushStack(RepairingManagementFragment())
         binding.navigationRail.setOnItemSelectedListener { item ->
             when (item.itemId) {
@@ -52,6 +52,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
                 }
 
                 R.id.booking -> {
+                    setTitle("Product Module")
                     pushStack(ProductModuleFragment(), true)
                     true
                 }

@@ -9,7 +9,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import com.rom.garagely.model.Client
 import com.rom.garagely.util.uploadImage
-import com.rom.garagely.util.upsert
+import com.rom.garagely.util.upsertOrder
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -32,7 +32,7 @@ class ClientViewModel @Inject constructor(
             imageUri?.let {
                client.image = firebaseStorage.uploadImage("product/image/${client.id}",imageUri)
             }
-            firebaseFirestore.upsert(client, onSuccess = {
+            firebaseFirestore.upsertOrder(client, onSuccess = {
                 _createClient.postValue(client)
             }) {
             }

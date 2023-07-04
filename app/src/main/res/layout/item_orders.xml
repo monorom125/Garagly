@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <com.daimajia.swipe.SwipeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:drag_edge="left">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent">
+
+            <ImageButton
+                android:id="@+id/buttonRemove"
+                android:layout_width="56dp"
+                android:layout_height="match_parent"
+                android:layout_marginStart="@dimen/dimen_6"
+                android:background="@color/color_red"
+                android:src="@drawable/yd_bin"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="ContentDescription" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/layoutOrderDish"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingVertical="8dp">
+
+            <TextView
+                android:id="@+id/textViewDishName"
+                style="@style/TextViewStyle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:paddingStart="@dimen/dimen_16"
+                app:layout_constraintEnd_toStartOf="@id/textViewQuantity"
+                app:layout_constraintHorizontal_weight="0.45"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="RtlSymmetry"
+                tools:text="CHICKEN EGG LARGE" />
+
+            <TextView
+                android:id="@+id/textViewQuantity"
+                style="@style/TextViewStyle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:gravity="center"
+                android:maxLines="1"
+                app:layout_constraintBottom_toBottomOf="@id/textViewDishName"
+                app:layout_constraintEnd_toStartOf="@id/textViewPrice"
+                app:layout_constraintHorizontal_weight="0.13"
+                app:layout_constraintStart_toEndOf="@id/textViewDishName"
+                app:layout_constraintTop_toTopOf="@id/textViewDishName"
+                tools:text="1" />
+
+            <TextView
+                android:id="@+id/textViewPrice"
+                style="@style/TextViewStyle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:autoSizeMaxTextSize="@dimen/default_text_size"
+                android:autoSizeMinTextSize="@dimen/extreme_small_text_size"
+                android:autoSizeTextType="uniform"
+                android:gravity="center"
+                android:maxLines="1"
+                app:layout_constraintBottom_toBottomOf="@id/textViewDishName"
+                app:layout_constraintEnd_toStartOf="@id/textViewTotal"
+                app:layout_constraintHorizontal_weight="0.21"
+                app:layout_constraintStart_toEndOf="@id/textViewQuantity"
+                app:layout_constraintTop_toTopOf="@id/textViewDishName"
+                tools:text="$1.50" />
+
+            <TextView
+                android:id="@+id/textViewTotal"
+                style="@style/TextViewStyle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:autoSizeMaxTextSize="@dimen/default_text_size"
+                android:autoSizeMinTextSize="@dimen/extreme_small_text_size"
+                android:autoSizeTextType="uniform"
+                android:layout_marginStart="8dp"
+                android:gravity="end|center"
+                android:maxLines="1"
+                android:layout_marginEnd="@dimen/dimen_16"
+                app:layout_constraintBottom_toBottomOf="@id/textViewDishName"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_weight="0.21"
+                app:layout_constraintStart_toEndOf="@id/textViewPrice"
+                app:layout_constraintTop_toTopOf="@id/textViewDishName"
+                tools:ignore="RtlSymmetry"
+                tools:text="$1.50" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </com.daimajia.swipe.SwipeLayout>
+
+</layout>
