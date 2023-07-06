@@ -21,12 +21,11 @@ import com.rom.garagely.util.upsert
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
 
 @HiltViewModel
 class SpaceDashBoardViewModel @Inject constructor(
-    private val dp: FirebaseFirestore,
+    private val db: FirebaseFirestore,
     private val storage: FirebaseStorage
 ) : ViewModel() {
 
@@ -53,13 +52,32 @@ class SpaceDashBoardViewModel @Inject constructor(
     }
 
 
+    fun closeSell(sell: Sell, isDelete: Boolean = false) {
+
+        viewModelScope.launch {
+            if (isDelete) {
+                db.delete(sell, onSuccess = {
+                    getSell()
+                }) {
+
+                }
+            } else {
+                db.upsert(sell, onSuccess = {
+                    getSell()
+                }) {
+                }
+            }
+
+        }
+    }
+
     private fun getOrders(sell: Sell?) {
         if (sell.isNull()) {
             orders.value = listOf()
             return
         }
         viewModelScope.launch {
-            dp.collection(ORDER).whereEqualTo("sell_id", sell!!.id)
+            db.collection(ORDER).whereEqualTo("sell_id", sell!!.id)
                 .get().addOnCompleteListener {
                     if (it.isSuccessful) {
                         orders.value = it.result.toObjects(Order::class.java)
@@ -70,7 +88,7 @@ class SpaceDashBoardViewModel @Inject constructor(
 
     private fun getSell() {
         viewModelScope.launch {
-            dp.collection(SELL).whereNotEqualTo("status", Sell.Status.Done.name)
+            db.collection(SELL).whereNotEqualTo("status", Sell.Status.Done.name)
                 .get()
                 .addOnCompleteListener {
                     if (it.isSuccessful) {
@@ -85,7 +103,7 @@ class SpaceDashBoardViewModel @Inject constructor(
 
     fun createSell(sell: Sell, onComplete: ((Sell) -> Unit)? = null) {
         viewModelScope.launch {
-            dp.upsert(sell, onSuccess = {
+            db.upsert(sell, onSuccess = {
                 this@SpaceDashBoardViewModel.sell = sell
                 onComplete?.invoke(sell)
             }) {
@@ -95,7 +113,7 @@ class SpaceDashBoardViewModel @Inject constructor(
 
     fun upsertOrder(order: Order, completion: ((Order) -> Unit)? = null) {
         viewModelScope.launch {
-            dp.upsert(order, onSuccess = {
+            db.upsert(order, onSuccess = {
                 getOrders(sell!!)
             }) {
 
@@ -103,11 +121,11 @@ class SpaceDashBoardViewModel @Inject constructor(
         }
     }
 
-    fun deletedOrder(order: Order){
+    fun deletedOrder(order: Order) {
         viewModelScope.launch {
-            dp.delete(order, onSuccess = {
+            db.delete(order, onSuccess = {
                 getOrders(sell)
-            }){
+            }) {
 
             }
         }
@@ -115,7 +133,7 @@ class SpaceDashBoardViewModel @Inject constructor(
 
     fun getClient(isPost: Boolean = false) {
         viewModelScope.launch(Dispatchers.Default) {
-            dp.collection(CLIENT)
+            db.collection(CLIENT)
                 .whereEqualTo(
                     ClientEntity.account_id,
                     PreferencesManager.instance.get(SharedPreferenceKeys.USER_ID)
@@ -129,6 +147,16 @@ class SpaceDashBoardViewModel @Inject constructor(
                         }
                     }
                 }
+        }
+    }
+
+    fun clearProduct(unPaidOrders: List<Order>) {
+        viewModelScope.launch(Dispatchers.IO) {
+            unPaidOrders.forEach {
+                db.delete(it, onSuccess = {}) {
+                }
+            }
+            getOrders(sell!!)
         }
     }
 }

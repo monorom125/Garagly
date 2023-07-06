@@ -1,6 +1,7 @@
 package com.rom.garagely.constant
 
 object Constant {
+    const val BILL: String = "bill"
     const val USER_COLLECTION = "user"
     const val SPACE_COLLECTION  = "space"
     const val  PRODUCT ="product"
@@ -10,5 +11,4 @@ object Constant {
     const val SELL = "sell"
     const val TAX = "tax"
     const val ORDER = "order"
-    const val ORDERS = "orderList"
 }

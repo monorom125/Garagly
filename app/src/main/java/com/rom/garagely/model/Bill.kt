@@ -15,20 +15,20 @@ import java.util.UUID
 data class Bill(
     override var id: String = UUID.randomUUID().toString(),
     var account_id: String? = null,
-    var key: Key? = null,
     var sell: Sell? = null,
     var discount: Discount? = null,
     var payDate :Date = Date(),
-    var status : Status = Status.UnPaid
+    var status : Status = Status.New
+
 ) : Parcelable, BaseModel() {
 
     override val pathName: String
-        get() = Constant.ORDER
+        get() = Constant.BILL
 
     @IgnoredOnParcel
     var orders = listOf<Order>()
 
     enum class Status {
-        UnPaid, Paid
+        New, Paid
     }
 }

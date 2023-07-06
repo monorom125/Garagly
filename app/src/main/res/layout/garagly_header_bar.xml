@@ -9,18 +9,40 @@
         android:layout_height="?attr/actionBarSize"
         android:background="@color/white">
 
-        <TextView
-            android:id="@+id/tvGarageName"
-            style="@style/TextViewStyle"
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/btn_back"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginVertical="10dp"
-            android:layout_marginStart="24dp"
-            android:textStyle="bold"
+            android:layout_height="match_parent"
+            android:layout_marginStart="@dimen/dimen_24dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:text="HayaGarage" />
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:id="@+id/img_back"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_back"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                android:visibility="gone"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tvGarageName"
+                style="@style/TextViewStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="10dp"
+                android:layout_marginStart="8dp"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@id/img_back"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="HayaGarage" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <TextView
             android:id="@+id/posTitle"
@@ -29,6 +51,7 @@
             android:layout_height="wrap_content"
             android:layout_marginVertical="10dp"
             android:layout_marginStart="24dp"
+            android:textSize="16sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -41,10 +64,10 @@
             android:id="@+id/ImageView_flag"
             android:layout_width="24dp"
             android:layout_height="24dp"
+            android:layout_marginEnd="16dp"
+            android:src="@drawable/ic_cambodia"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/imageLogout"
-            android:src="@drawable/ic_cambodia"
-            android:layout_marginEnd="16dp"
             app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView

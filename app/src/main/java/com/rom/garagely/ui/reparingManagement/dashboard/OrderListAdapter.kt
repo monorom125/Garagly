@@ -31,7 +31,7 @@ class OrderListAdapter : BaseRecyclerViewAdapter<Order, OrderListAdapter.OrderVi
             binding.textViewQuantity.text = order.qty.toString()
             binding.textViewPrice.text = order.product?.price.toString()
             binding.textViewTotal.text = (((order.qty * order.product?.price!!))).toString()
-            binding.root.isClickable = order.isEdible()
+            binding.root.isClickable = order.isEdible
             binding.buttonRemove.setOnClickListener {
                 action?.invoke(order, bindingAdapterPosition)
             }

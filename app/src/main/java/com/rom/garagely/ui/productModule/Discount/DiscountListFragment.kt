@@ -140,7 +140,7 @@ class DiscountListFragment : BaseComposeFragment() {
                             )
                         },
                         shape = RoundedCornerShape(8.dp),
-                        colors = ButtonDefaults.buttonColors(backgroundColor = AppColor.Red),
+                        colors = ButtonDefaults.buttonColors(backgroundColor = AppColor.LightOrange),
                         modifier = Modifier
                             .padding(vertical = 16.dp)
                             .padding(end = 16.dp)

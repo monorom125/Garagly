@@ -7,9 +7,11 @@ import android.os.Bundle
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
+import com.rom.garagely.custom.view.GaraglyHeaderBar
 import com.rom.garagely.databinding.ActivityMainBinding
 import com.rom.garagely.model.User
 import com.rom.garagely.ui.base.BaseActivity
+import com.rom.garagely.ui.loginByPin.LoginPinCodeActivity
 import com.rom.garagely.ui.productModule.ProductModuleFragment
 import com.rom.garagely.ui.reparingManagement.RepairingManagementFragment
 import com.rom.garagely.util.parcelable
@@ -43,6 +45,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
         this.user = intent.parcelable("USER", User::class.java)!!
         binding.posHeaderToolbar.setGaragelyName(this.user?.name ?: "")
         setTitle("Retail Management")
+        onHeaderListener()
         pushStack(RepairingManagementFragment())
         binding.navigationRail.setOnItemSelectedListener { item ->
             when (item.itemId) {
@@ -66,11 +69,28 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
                 }
             }
         }
+
     }
 
     fun setTitle(title: String) {
         binding.posHeaderToolbar.setTitle(title)
 
+    }
+    fun isVisible(isVisable : Boolean = false){
+        binding.posHeaderToolbar.isVisibleBack(isVisable)
+    }
+
+    fun onHeaderListener() {
+
+        binding.posHeaderToolbar.delegate = object : GaraglyHeaderBar.Delegate {
+            override fun onLogoutClick() {
+                LoginPinCodeActivity.launch(this@MainActivity)
+            }
+
+            override fun onBackClick() {
+                popStack()
+            }
+        }
     }
 
 
@@ -118,7 +138,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
 
     private fun updateFragment() {
         currentFragment = supportFragmentManager.fragments.firstOrNull { it.tag == topStackTag }
-         delegate?.popBack()
+        delegate?.popBack()
 
     }
 

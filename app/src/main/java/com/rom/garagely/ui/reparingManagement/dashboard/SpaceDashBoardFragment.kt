@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import com.rom.garagely.MainActivity
 import com.rom.garagely.R
 import com.rom.garagely.common.PreferencesManager
 import com.rom.garagely.common.init
@@ -12,9 +13,11 @@ import com.rom.garagely.databinding.FragmentSpaceDashBoardBinding
 import com.rom.garagely.model.Client
 import com.rom.garagely.model.Order
 import com.rom.garagely.model.Sell
+import com.rom.garagely.model.Status
 import com.rom.garagely.ui.Dailog.SearchGuestPopWindow
 import com.rom.garagely.ui.client.CreateClientActivity
 import com.rom.garagely.ui.base.BaseFragment
+import com.rom.garagely.ui.payment.PaymentPageFragment
 import com.rom.garagely.util.formatToHour
 import com.rom.garagely.util.isNull
 import dagger.hilt.android.AndroidEntryPoint
@@ -31,13 +34,19 @@ class SpaceDashBoardFragment : BaseFragment<FragmentSpaceDashBoardBinding>() {
     private val createClient = registerForActivityResult(CreateClientActivity.Contract()) {
     }
 
+    private var guestPopupWindow: SearchGuestPopWindow? = null
+    private val orderListAdapter by lazy {
+        OrderListAdapter()
+    }
+
     fun create(sell: Sell) {
         viewModel.createSell(sell)
     }
 
     fun setOrder(order: Order) {
         if (viewModel.sell.isNull()) {
-            val sell = Sell(account_id = PreferencesManager.instance.get(SharedPreferenceKeys.USER_ID))
+            val sell =
+                Sell(account_id = PreferencesManager.instance.get(SharedPreferenceKeys.USER_ID))
             order.sell_id = sell.id
 
             viewModel.createSell(sell) {
@@ -56,23 +65,61 @@ class SpaceDashBoardFragment : BaseFragment<FragmentSpaceDashBoardBinding>() {
         }
     }
 
-    private var guestPopupWindow: SearchGuestPopWindow? = null
-    private val orderListAdapter by lazy {
-        OrderListAdapter()
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setUpView()
+        observableOrders()
+        observableClinet()
+        observableSell()
+    }
+
+    private fun updateClearButton(isOrderDishEmpty: Boolean) {
+        val clearIcon = R.drawable.ic_clear.takeIf { !isOrderDishEmpty }
+            ?: R.drawable.ic_delete_24dp
+        val clearText = getString(R.string.CLEAR).takeIf { !isOrderDishEmpty }
+            ?: getString(R.string.delete)
+        val paddingTop = requireContext().resources.getDimensionPixelOffset(R.dimen.dimen_12)
+            .takeIf { !isOrderDishEmpty }
+            ?: requireContext().resources.getDimensionPixelOffset(R.dimen.dimen_6)
+        binding.buttonClear.apply {
+            text = clearText
+            setCompoundDrawablesWithIntrinsicBounds(0, clearIcon, 0, 0)
+            val paddingHorizontal =
+                requireContext().resources.getDimensionPixelOffset(R.dimen.dimen_16)
+            setPadding(paddingHorizontal, paddingTop, paddingHorizontal, 0)
+        }
+    }
+
+
+    fun setUpView(){
         binding.rvOrderList.init(orderListAdapter)
         binding.tvNewClient.setOnClickListener {
             viewModel.getClient(true)
         }
         orderListAdapter.setDelegate { item, _ ->
-         viewModel.deletedOrder(item)
+            viewModel.deletedOrder(item)
         }
-        observableOrders()
-        observableClinet()
-        observableSell()
+
+        binding.buttonClear.setOnClickListener {
+            if (viewModel.sell.isNull()) return@setOnClickListener
+            if (orderListAdapter.items.isEmpty()) {
+                viewModel.closeSell(viewModel.sell!!, true)
+            }
+            if (orderListAdapter.items.all { it.status == Status.Paid }) {
+                viewModel.sell?.status = Sell.Status.Done
+                viewModel.closeSell(viewModel.sell!!)
+            }
+            if(orderListAdapter.items.any { it.status == Status.Order }){
+                val unPaidOrders = orderListAdapter.items.filter { it.status == Status.Order }
+                viewModel.clearProduct(unPaidOrders)
+            }
+        }
+
+        binding.buttonPay.setOnClickListener {
+            val paymentPayPage = PaymentPageFragment()
+            (requireActivity() as MainActivity).isVisible(true)
+            (requireActivity() as MainActivity).pushStack(paymentPayPage, withAnimation = true)
+        }
     }
 
     private fun observableClinet() {
@@ -104,6 +151,7 @@ class SpaceDashBoardFragment : BaseFragment<FragmentSpaceDashBoardBinding>() {
     private fun observableOrders() {
         viewModel.orders.observe(viewLifecycleOwner) {
             orderListAdapter.set(it)
+            updateClearButton(orderListAdapter.items.isEmpty())
         }
     }
 
@@ -113,6 +161,7 @@ class SpaceDashBoardFragment : BaseFragment<FragmentSpaceDashBoardBinding>() {
                 binding.tvSell.text = "no order"
             }
             binding.tvSell.text = it?.date.formatToHour()
+
 
         }
     }

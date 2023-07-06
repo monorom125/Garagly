@@ -4,6 +4,8 @@ import com.rom.garagely.constant.Constant.SELL
 import kotlinx.android.parcel.Parcelize
 import java.util.Date
 import android.os.Parcelable
+import com.google.firebase.firestore.Exclude
+import kotlinx.parcelize.IgnoredOnParcel
 import java.util.UUID
 
 @Parcelize
@@ -17,6 +19,10 @@ data class Sell(
 
     override val pathName: String
         get() = SELL
+
+    @IgnoredOnParcel
+    @Exclude
+    var orders  = arrayListOf<Order>()
 
     enum class Status {
         UnPaid, Paid, Done

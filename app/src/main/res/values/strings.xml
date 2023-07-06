@@ -84,4 +84,17 @@
     <string name="status">Status</string>
     <string name="end_date">End date</string>
     <string name="percent">Percent</string>
+    <string name="before_discount">Before discount</string>
+    <string name="receipt_discount">Receipt Discount</string>
+    <string name="subtotal">Subtotal</string>
+    <string name="tax">Tax</string>
+    <string name="total">Total\n</string>
+    <string name="balance_due">Balance due</string>
+    <string name="PAYMENT">Payment</string>
+    <string name="CHANGE">Change</string>
+    <string name="delete">Delete</string>
+    <string name="_0">0</string>
+    <string name="pay_vai">Pay vai</string>
+    <string name="retail">Retail</string>
+    <string name="Item">Item</string>
 </resources>
