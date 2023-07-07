@@ -2,8 +2,10 @@ package com.rom.garagely.ui.reparingManagement.dashboard
 
 import android.os.Bundle
 import android.view.View
+import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import com.bumptech.glide.Glide
 import com.rom.garagely.MainActivity
 import com.rom.garagely.R
 import com.rom.garagely.common.PreferencesManager
@@ -18,6 +20,7 @@ import com.rom.garagely.ui.Dailog.SearchGuestPopWindow
 import com.rom.garagely.ui.client.CreateClientActivity
 import com.rom.garagely.ui.base.BaseFragment
 import com.rom.garagely.ui.payment.PaymentPageFragment
+import com.rom.garagely.util.display
 import com.rom.garagely.util.formatToHour
 import com.rom.garagely.util.isNull
 import dagger.hilt.android.AndroidEntryPoint
@@ -91,7 +94,7 @@ class SpaceDashBoardFragment : BaseFragment<FragmentSpaceDashBoardBinding>() {
     }
 
 
-    fun setUpView(){
+    fun setUpView() {
         binding.rvOrderList.init(orderListAdapter)
         binding.tvNewClient.setOnClickListener {
             viewModel.getClient(true)
@@ -109,10 +112,14 @@ class SpaceDashBoardFragment : BaseFragment<FragmentSpaceDashBoardBinding>() {
                 viewModel.sell?.status = Sell.Status.Done
                 viewModel.closeSell(viewModel.sell!!)
             }
-            if(orderListAdapter.items.any { it.status == Status.Order }){
+            if (orderListAdapter.items.any { it.status == Status.Order }) {
                 val unPaidOrders = orderListAdapter.items.filter { it.status == Status.Order }
                 viewModel.clearProduct(unPaidOrders)
             }
+        }
+        binding.buttonRemoveCustomer.setOnClickListener {
+            viewModel.sell?.client = null
+            viewModel.createSell(viewModel.sell!!)
         }
 
         binding.buttonPay.setOnClickListener {
@@ -152,6 +159,8 @@ class SpaceDashBoardFragment : BaseFragment<FragmentSpaceDashBoardBinding>() {
         viewModel.orders.observe(viewLifecycleOwner) {
             orderListAdapter.set(it)
             updateClearButton(orderListAdapter.items.isEmpty())
+            binding.textViewTotal.text = "$" + it.sumOf { it.totalAmount }.display
+            binding.textViewItemCount.text = orderListAdapter.items.sumOf { it.qty }.toString()
         }
     }
 
@@ -161,9 +170,21 @@ class SpaceDashBoardFragment : BaseFragment<FragmentSpaceDashBoardBinding>() {
                 binding.tvSell.text = "no order"
             }
             binding.tvSell.text = it?.date.formatToHour()
-
-
+            binding.tvNewClient.isVisible = it?.client.isNull()
+            binding.layoutCustomerInfo.isVisible = !it?.client.isNull()
+            setUpCustomer(it?.client)
         }
+    }
+
+    private fun setUpCustomer(client: Client?) {
+        Glide.with(binding.root)
+            .load(client?.image)
+            .placeholder(R.drawable.ic_image_guest)
+            .circleCrop()
+            .into(binding.imageViewCustomer)
+        binding.textViewCustomerName.text = client?.first_name + client?.last_name?:""
+        binding.textViewPhoneNumber.text = client?.phone_number?:""
+
     }
 
     interface Delegate {

@@ -3,7 +3,9 @@ package com.rom.garagely.model
 import android.os.Parcelable
 import com.google.firebase.firestore.Exclude
 import com.rom.garagely.constant.Constant
+import com.rom.garagely.util.isNull
 import kotlinx.android.parcel.Parcelize
+import kotlinx.parcelize.IgnoredOnParcel
 import java.util.UUID
 
 @Parcelize
@@ -29,6 +31,24 @@ data class Order(
     val isEdible: Boolean
         @Exclude get() {
             return this.status == Status.Order
+        }
+
+
+//    @IgnoredOnParcel
+//    val discountAmount: Double
+//        get() {
+//            return if (product!!.discount.isNull()) {
+//                product!!.productPriceWithTax * (product!!.discount?.discount_amount!! / 100)
+//            } else {
+//                0.00
+//            }
+//        }
+
+    val totalAmount: Double
+        get() = if (product?.productPriceWithTax.isNull()) {
+            0.00
+        } else {
+            (qty * product!!.productPriceWithTax)
         }
 }
 

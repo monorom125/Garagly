@@ -2,6 +2,7 @@ package com.rom.garagely.model
 
 import android.os.Parcelable
 import com.rom.garagely.constant.Constant.PRODUCT
+import com.rom.garagely.util.isNull
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.parcel.RawValue
 import java.io.Serializable
@@ -33,6 +34,16 @@ data class Car(
 
     override val pathName: String
         get() = PRODUCT
+
+    val productPriceWithTax : Double
+        get() {
+            return if(vat.isNull()){
+                price
+            }
+            else{
+                price + ((price * vat?.tax_percent!!)/100)
+            }
+        }
 }
 
 @Parcelize

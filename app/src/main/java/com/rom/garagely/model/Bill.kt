@@ -1,4 +1,5 @@
 import android.os.Parcelable
+import com.google.firebase.firestore.Exclude
 import com.rom.garagely.constant.Constant
 import com.rom.garagely.model.BaseModel
 import com.rom.garagely.model.Car
@@ -17,16 +18,25 @@ data class Bill(
     var account_id: String? = null,
     var sell: Sell? = null,
     var discount: Discount? = null,
-    var payDate :Date = Date(),
-    var status : Status = Status.New
+    var payDate: Date = Date(),
+    var amount: Double? = 0.00,
+    var change_amount: Double? = 0.00,
+    var status: Status = Status.New
 
 ) : Parcelable, BaseModel() {
 
+
     override val pathName: String
-        get() = Constant.BILL
+        @Exclude get() = Constant.BILL
 
     @IgnoredOnParcel
-    var orders = listOf<Order>()
+
+    val orders
+        @Exclude get() = sell?.orders ?: listOf()
+
+//    @IgnoredOnParcel
+//    val totalDiscount: Double
+////        @Exclude get() = orders.sumOf { it.discountAmount }
 
     enum class Status {
         New, Paid

@@ -21,7 +21,6 @@ class SearchGuestPopWindow (context: Context, width: Int, height: Int = ViewGrou
             delegate?.onContactSelected(customer)
         }
     })
-    private var isLocked = true
     private var customers = listOf<Client>()
 
     var isSearchAble: Boolean = false
@@ -40,15 +39,12 @@ class SearchGuestPopWindow (context: Context, width: Int, height: Int = ViewGrou
         binding.recyclerViewGuest.init(adapter)
         binding.textViewAddGuest.setOnClickListener {
             delegate?.onAddGuest()
-            isLocked = !isLocked
         }
 
     }
 
     override fun dismiss() {
-        if (!isLocked) {
             super.dismiss()
-        }
     }
 
 //    fun filter(query: String) {
@@ -60,14 +56,6 @@ class SearchGuestPopWindow (context: Context, width: Int, height: Int = ViewGrou
         adapter.set(customers)
     }
 
-    fun setLock(isLocked: Boolean) {
-        this.isLocked = isLocked
-    }
-
-    fun forceDismiss() {
-        isLocked = false
-        dismiss()
-    }
 
     interface Delegate {
         fun onContactSelected(customer: Client)

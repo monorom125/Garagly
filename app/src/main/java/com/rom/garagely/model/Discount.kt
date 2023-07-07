@@ -41,6 +41,7 @@ data class Discount(
             }
         }
 
+
     fun getTheActive(): Boolean {
         if (end_time.isNull()) return false
         return Date().before(end_time)

@@ -97,4 +97,6 @@
     <string name="pay_vai">Pay vai</string>
     <string name="retail">Retail</string>
     <string name="Item">Item</string>
+    <string name="total_label">Total:</string>
+    <string name="discount_label">Discount:</string>
 </resources>
